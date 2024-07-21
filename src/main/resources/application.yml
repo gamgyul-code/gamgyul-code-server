@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: halmang-vision
+
+logging:
+    level:
+      org.hibernate.SQL: debug
