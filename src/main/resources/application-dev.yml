@@ -13,5 +13,20 @@ spring:
     username: root
     password: halmangsql
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: http://43.200.126.36:8080/login/oauth2/code/google # 추우 백엔드 도메인 연결 시 수정
+          naver:
+            redirect-uri: http://43.200.126.36:8080/login/oauth2/code/naver
+          kakao:
+            redirect-uri: http://43.200.126.36:8080/login/oauth2/code/kakao
+
 server:
   port: 8080
+
+oauth2:
+  success:
+    redirect-url: http://localhost:3000/ # 추후 프론트 도메인 연결 시 수정
