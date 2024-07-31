@@ -12,3 +12,6 @@ spring:
     url: jdbc:mysql://halmang.cn0ucog6cinm.ap-northeast-2.rds.amazonaws.com:3306/halmang
     username: root
     password: halmangsql
+
+server:
+  port: 8080
