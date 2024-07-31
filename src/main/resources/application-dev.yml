@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://halmang.cn0ucog6cinm.ap-northeast-2.rds.amazonaws.com:3306/halmang
     username: root
-    password: halmangsql
+    password: ${DEV_MYSQL_PASSWORD}
 
   security:
     oauth2:
