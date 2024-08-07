@@ -78,7 +78,6 @@ public class JwtTokenProvider {
         cookie.setHttpOnly(true);
         //cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setDomain("http://localhost:3000");
         cookie.setMaxAge(60 * 60 * 24); // accessToken 유효
         return cookie;
     }
@@ -89,7 +88,6 @@ public class JwtTokenProvider {
         cookie.setHttpOnly(true);
         //cookie.setSecure(true); TODO : HTTPS 적용 시 적용 가능
         cookie.setPath("/");
-        cookie.setDomain("http://localhost:3000");
         cookie.setMaxAge(60 * 60 * 24);
         return cookie;
     }
