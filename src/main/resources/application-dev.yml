@@ -29,4 +29,4 @@ server:
 
 oauth2:
   success:
-    redirect-url: http://43.200.126.36:8080/test2 # 추후 프론트 도메인 연결 시 수정
+    redirect-url: http://43.200.126.36:8080/members/test2 # 추후 프론트 도메인 연결 시 수정
