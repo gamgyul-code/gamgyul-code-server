@@ -5,8 +5,6 @@ files:
       destination: /home/ubuntu/gamgyul-code-server
     - source: /nginx
       destination: /etc/nginx
-    - source: /.env
-      destination: /home/ubuntu/gamgyul-code-server
 file_exists_behavior: OVERWRITE
 
 permissions:
