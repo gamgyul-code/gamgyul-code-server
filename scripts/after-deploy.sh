@@ -5,7 +5,7 @@ DEPLOY_LOG_PATH="$PROJECT_PATH/logs/deploy.log"
 DEPLOY_ERR_LOG_PATH="$PROJECT_PATH/logs/deploy_err.log"
 APPLICATION_LOG_PATH="$PROJECT_PATH/logs/application.log"
 BUILD_PATH="$PROJECT_PATH/build/libs"
-JAR_PATH="$BUILD_PATH/*.jar"
+JAR_PATH="$BUILD_PATH/halmang-vision-0.0.1-SNAPSHOT.jar"
 BUILD_JAR=$(ls $JAR_PATH)
 JAR_NAME=$(basename $BUILD_JAR)
 
