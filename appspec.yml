@@ -3,8 +3,6 @@ os: linux
 files:
     - source: /
       destination: /home/ubuntu/gamgyul-code-server
-    - source: /nginx
-      destination: /etc/nginx
 file_exists_behavior: OVERWRITE
 
 permissions:
