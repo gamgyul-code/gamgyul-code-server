@@ -24,7 +24,7 @@ public class MemberService {
         }
 
         clearCookies(request, response);
-        return new RedirectView("/"); // 로그아웃 후 리디렉션할 URL
+        return new RedirectView("/");
     }
 
     private void clearCookies(HttpServletRequest request, HttpServletResponse response) {
