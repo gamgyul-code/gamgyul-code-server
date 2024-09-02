@@ -1,9 +1,13 @@
 #!/bin/bash
 
 PROJECT_PATH="/home/ubuntu/gamgyul-code-server"
-DEPLOY_LOG_PATH="$PROJECT_PATH/logs/deploy.log"
-DEPLOY_ERR_LOG_PATH="$PROJECT_PATH/logs/deploy_err.log"
-APPLICATION_LOG_PATH="$PROJECT_PATH/logs/application.log"
+LOG_DIR="$PROJECT_PATH/logs
+# 로그 디렉토리가 존재하지 않으면 생성
+mkdir -p $LOG_DIR
+
+DEPLOY_LOG_PATH="$LOG_DIR/deploy.log"
+DEPLOY_ERR_LOG_PATH="$LOG_DIR/deploy_err.log"
+APPLICATION_LOG_PATH="$LOG_DIR/application.log"
 BUILD_PATH="$PROJECT_PATH/build/libs"
 JAR_PATH="$BUILD_PATH/halmang-vision-0.0.1-SNAPSHOT.jar"
 BUILD_JAR=$(ls $JAR_PATH)
