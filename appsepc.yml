@@ -1,21 +1,22 @@
 version: 0.0
 os: linux
-
 files:
-  - source:  /
-    destination: /home/ubuntu/halmang-vision
-    overwrite: yes
+    - source: /
+      destination: /home/ubuntu/gamgyul-code-server
+    - source: /nginx
+      destination: /etc/nginx
+    - source: /.env
+      destination: /home/ubuntu/gamgyul-code-server
+file_exists_behavior: OVERWRITE
 
 permissions:
-  - object: /
-    pattern: "**"
-    owner: ubuntu
-    group: ubuntu
+    - object: /
+      pattern: '**'
+      owner: root
+      group: root
 
 hooks:
-  AfterInstall:
-    - location: scripts/stop.sh
-      timeout: 60
-  ApplicationStart:
-    - location: scripts/start.sh
-      timeout: 60
+    AfterInstall:
+        - location: scripts/after-deploy.sh
+          timeout: 2000
+          runas: root
