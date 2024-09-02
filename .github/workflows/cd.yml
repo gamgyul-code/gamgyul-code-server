@@ -1,9 +1,6 @@
 name: 🚀 Deploy workflow on main environment
 
 on:
-  pull_request:
-    branches: [main]
-    types: [closed]
   push:
     branches: [main]
 
@@ -30,7 +27,6 @@ jobs:
         run: ./gradlew test
       
   deploy:
-    if: github.event.pull_request.merged == true
     env:
       ENV_PATH: .env
       S3_BUCKET_DIR_NAME: main
