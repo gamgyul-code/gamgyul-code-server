@@ -1,4 +1,4 @@
-package com.gamgyul_code.halmang_vision.oauth2.dto;
+package com.gamgyul_code.halmang_vision.global.oauth2.dto;
 
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import lombok.AllArgsConstructor;

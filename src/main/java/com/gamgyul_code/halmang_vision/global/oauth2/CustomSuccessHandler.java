@@ -1,10 +1,10 @@
-package com.gamgyul_code.halmang_vision.oauth2;
+package com.gamgyul_code.halmang_vision.global.oauth2;
 
 
 import com.gamgyul_code.halmang_vision.global.jwt.JwtTokenProvider;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.CustomOAuth2User;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
-import com.gamgyul_code.halmang_vision.oauth2.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
