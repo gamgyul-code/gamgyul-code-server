@@ -1,4 +1,4 @@
-package com.gamgyul_code.halmang_vision.utils;
+package com.gamgyul_code.halmang_vision.global.utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

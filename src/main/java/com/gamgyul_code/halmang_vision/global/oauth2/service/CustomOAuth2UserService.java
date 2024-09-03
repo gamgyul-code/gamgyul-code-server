@@ -1,9 +1,14 @@
-package com.gamgyul_code.halmang_vision.oauth2.service;
+package com.gamgyul_code.halmang_vision.global.oauth2.service;
 
 
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.CustomOAuth2User;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.GoogleResponse;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.KakaoResponse;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.NaverResponse;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.Oauth2Dto;
+import com.gamgyul_code.halmang_vision.global.oauth2.dto.Oauth2Response;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
-import com.gamgyul_code.halmang_vision.oauth2.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

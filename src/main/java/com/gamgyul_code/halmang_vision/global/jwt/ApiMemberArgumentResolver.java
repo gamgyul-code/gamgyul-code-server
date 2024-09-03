@@ -1,7 +1,7 @@
 package com.gamgyul_code.halmang_vision.global.jwt;
 
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
-import com.gamgyul_code.halmang_vision.utils.AuthPrincipal;
+import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
