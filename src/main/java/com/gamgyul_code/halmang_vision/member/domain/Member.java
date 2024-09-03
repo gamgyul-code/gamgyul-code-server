@@ -1,9 +1,13 @@
 package com.gamgyul_code.halmang_vision.member.domain;
 
+import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
+import com.gamgyul_code.halmang_vision.route.domain.Route;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -27,4 +31,10 @@ public class Member {
     private String password;
 
     private String username;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bookmark> bookmarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Route> routes = new ArrayList<>();
 }
