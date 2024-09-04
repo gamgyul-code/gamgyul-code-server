@@ -2,6 +2,7 @@ package com.gamgyul_code.halmang_vision.member.domain;
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
+import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,6 +32,8 @@ public class Member {
     private String password;
 
     private String username;
+
+    private LanguageCode languageCode = LanguageCode.KOR; //TODO: 언어 선택 API 구현 필
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();

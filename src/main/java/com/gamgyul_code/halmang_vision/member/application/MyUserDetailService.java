@@ -20,4 +20,10 @@ public class MyUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다."));
         return new CustomUserDetails(member);
     }
+
+    public CustomUserDetails loadUserByIdAndUsername(Long memberId, String username) throws UsernameNotFoundException {
+        Member member = memberRepository.findByIdAndUsername(memberId, username)
+                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다.")); // TODO : global exception
+        return new CustomUserDetails(member);
+    }
 }
