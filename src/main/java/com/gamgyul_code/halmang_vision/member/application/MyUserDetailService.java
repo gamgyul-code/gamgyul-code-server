@@ -1,5 +1,8 @@
 package com.gamgyul_code.halmang_vision.member.application;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_MEMBER;
+
+import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.CustomUserDetails;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
@@ -23,7 +26,7 @@ public class MyUserDetailService implements UserDetailsService {
 
     public CustomUserDetails loadUserByIdAndUsername(Long memberId, String username) throws UsernameNotFoundException {
         Member member = memberRepository.findByIdAndUsername(memberId, username)
-                .orElseThrow(() -> new IllegalArgumentException("멤버를 찾을 수 없습니다.")); // TODO : global exception
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_MEMBER));
         return new CustomUserDetails(member);
     }
 }

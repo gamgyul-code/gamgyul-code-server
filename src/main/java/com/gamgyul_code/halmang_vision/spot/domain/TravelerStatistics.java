@@ -1,7 +1,10 @@
 package com.gamgyul_code.halmang_vision.spot.domain;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_TRAVELER_STATISTICS;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 
 public enum TravelerStatistics {
     HIGH, MEDIUM, LOW;
@@ -13,7 +16,7 @@ public enum TravelerStatistics {
                 return statistics;
             }
         }
-        throw new IllegalStateException("Unexpected value: " + value); //TODO: 커스텀 에러 구현
+        throw new HalmangVisionException(INVALID_TRAVELER_STATISTICS);
     }
 
     @JsonValue
