@@ -1,7 +1,10 @@
 package com.gamgyul_code.halmang_vision.spot.domain;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_SPOT_CATEGORY;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 
 public enum SpotCategory {
     HALMANG, LOVE, HISTORY, MYTH;
@@ -13,7 +16,7 @@ public enum SpotCategory {
                 return category;
             }
         }
-        throw new IllegalStateException("Unexpected value: " + value); //TODO: 커스텀 에러 구현
+        throw new HalmangVisionException(INVALID_SPOT_CATEGORY); //TODO: 커스텀 에러 구현
     }
 
     @JsonValue

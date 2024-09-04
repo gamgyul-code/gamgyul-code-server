@@ -1,7 +1,10 @@
 package com.gamgyul_code.halmang_vision.spot.domain;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_LANGUAGE_CODE;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 
 public enum LanguageCode {
     KOR, ENG, JPN, CHN;
@@ -13,7 +16,7 @@ public enum LanguageCode {
                 return code;
             }
         }
-        throw new IllegalStateException("Unexpected value: " + value); //TODO: 커스텀 에러 구현
+        throw new HalmangVisionException(INVALID_LANGUAGE_CODE);
     }
 
     @JsonValue

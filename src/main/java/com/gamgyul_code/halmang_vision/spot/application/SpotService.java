@@ -1,6 +1,10 @@
 package com.gamgyul_code.halmang_vision.spot.application;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
+
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
+import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
@@ -35,7 +39,7 @@ public class SpotService {
     @Transactional
     public void createSpotTranslation(CreateSpotTranslationRequest createSpotTranslationRequest, Long spotId) {
         Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 관광지가 존재하지 않습니다.")); // TODO: 예외 처리
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT));
 /*
         if (spotTranslationRepository.findById(spotId).isPresent() &&
                 spotTranslationRepository.findById(spotId).get().getLanguageCode().equals(createSpotTranslationRequest.getLanguageCode())) {
@@ -58,7 +62,7 @@ public class SpotService {
     @Transactional(readOnly = true)
     public SpotTranslationResponse findById(Long spotId, ApiMember apiMember) {
         SpotTranslation spotTranslation = spotTranslationRepository.findById(spotId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 관광지 번역 정보가 존재하지 않습니다.")); // TODO: 예외 처리
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
 
         long memberId = apiMember.toMember(memberRepository).getId();
         boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotId);
