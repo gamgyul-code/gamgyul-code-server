@@ -49,11 +49,11 @@ public class Spot extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private TravelerStatistics travelerStatistics;
 
-    @Size(max = 50) // TODO : 예외처리
+    @Size(max = 50)
     @NotBlank
     private String openingHours;
 
-    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$") // TODO : 예외처리
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
