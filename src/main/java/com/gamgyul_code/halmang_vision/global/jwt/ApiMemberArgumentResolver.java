@@ -35,10 +35,11 @@ public class ApiMemberArgumentResolver implements HandlerMethodArgumentResolver 
             throw new IllegalArgumentException("빈 토큰입니다.");
         }
 
-        String token = jwtTokenProvider.resolveToken(request);
-        jwtTokenProvider.validateToken(token);
-        String email = jwtTokenProvider.getPayload(token);
+        jwtTokenProvider.validateToken(accessToken);
+        String username = jwtTokenProvider.getPayload(accessToken);
+        Long memberId = jwtTokenProvider.getMemberId(accessToken);
+        log.info("@ArgumentResolver ---- email={}, memberId={}", username, memberId);
 
-        return new ApiMember(email);
+        return new ApiMember(username, memberId);
     }
 }
