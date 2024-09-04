@@ -12,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
@@ -34,18 +36,24 @@ public class Spot extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank
+    @Column(unique = true)
+    private String name;
+
     @Enumerated(value = EnumType.STRING)
-    private SpotCategory category;
+    @NotNull
+    private SpotCategory spotCategory;
 
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING)
     private TravelerStatistics travelerStatistics;
 
-    @Size(max = 50)
+    @Size(max = 50) // TODO : 예외처리
+    @NotBlank
     private String openingHours;
 
-    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$") // TODO : 예외처리
     private String phoneNumber;
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)

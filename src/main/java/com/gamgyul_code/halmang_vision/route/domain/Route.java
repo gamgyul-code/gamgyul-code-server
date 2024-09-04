@@ -30,8 +30,8 @@ public class Route extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 20)
-    private String routeName;
+    @Size(max = 15)
+    private String routeName; // TODO : 중복 불가
 
     @ManyToOne
     @JoinColumn(name = "member_id")

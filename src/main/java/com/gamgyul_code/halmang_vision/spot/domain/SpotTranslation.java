@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,14 +31,22 @@ public class SpotTranslation extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
+    @Column(unique = true) // TODO : 예외 처리
+    @NotBlank
+    private String name;
+
     @Enumerated(value = EnumType.STRING)
+    @NotNull
     private LanguageCode languageCode;
 
-    private String summary;
+    @NotBlank
+    private String summary; //  TODO : xxx 관련 장소 - 로 Enum
 
+    @NotBlank
     private String address;
 
     @Size(max = 50)
+    @NotBlank
     private String fee;
 
     @Column(columnDefinition = "LONGTEXT")
