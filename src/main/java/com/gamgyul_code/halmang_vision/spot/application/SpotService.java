@@ -1,13 +1,16 @@
 package com.gamgyul_code.halmang_vision.spot.application;
 
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_EXIST_SPOT;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_EXIST_SPOT_TRANSLATION;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_EXIST_SPOT_TRANSLATION_NAME;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
-import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
+import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
@@ -33,25 +36,31 @@ public class SpotService {
     public void createSpot(CreateSpotRequest createSpotRequest) {
         Spot spot = createSpotRequest.toEntity();
 
+        if (spotRepository.findByName(spot.getName()).isPresent()) {
+            throw new HalmangVisionException(ALREADY_EXIST_SPOT);
+        }
+
         spotRepository.save(spot);
     }
 
     @Transactional
     public void createSpotTranslation(CreateSpotTranslationRequest createSpotTranslationRequest, Long spotId) {
+
+        // 해당 관광지 정보 존재 여부 확인
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT));
-/*
-        if (spotTranslationRepository.findById(spotId).isPresent() &&
-                spotTranslationRepository.findById(spotId).get().getLanguageCode().equals(createSpotTranslationRequest.getLanguageCode())) {
-            throw new IllegalArgumentException("이미 해당 언어로 번역된 정보가 존재합니다.");
+
+        // 이미 해당 언어로 번역된 정보가 존재하는지 확인
+        LanguageCode languageCode = createSpotTranslationRequest.getLanguageCode();
+
+        if (spotTranslationRepository.existsBySpotIdAndLanguageCode(spotId, languageCode)) {
+            throw new HalmangVisionException(ALREADY_EXIST_SPOT_TRANSLATION);
         }
 
+        // 번역된 관광지 이름이 중복인지 확인
         if (spotTranslationRepository.findByName(createSpotTranslationRequest.getName()) != null) {
-            spotTranslationRepository.deleteById(spotId); // TODO: 다시 체크
+            throw new HalmangVisionException(ALREADY_EXIST_SPOT_TRANSLATION_NAME);
         }
-
-
- */
 
         SpotTranslation spotTranslation = createSpotTranslationRequest.toEntity(spot);
 
