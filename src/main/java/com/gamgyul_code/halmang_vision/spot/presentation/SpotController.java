@@ -3,13 +3,16 @@ package com.gamgyul_code.halmang_vision.spot.presentation;
 import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.application.SpotService;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
-import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.TaleSpotTranslationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +43,16 @@ public class SpotController {
 
     @GetMapping("/{spotId}")
     @Operation(summary = "관광지 상세 조회", description = "번역된 관광지 상세 정보를 조회한다.")
-    public SpotTranslationResponse findById(@PathVariable Long spotId, @Parameter(hidden = true) @AuthPrincipal
+    public SpotTranslationDetailResponse findById(@PathVariable Long spotId, @Parameter(hidden = true) @AuthPrincipal
                                             ApiMember apiMember) {
         return spotService.findById(spotId, apiMember);
     }
+
+    @GetMapping("/tale/{category}")
+    @Operation(summary = "경", description = "설화별 관광지를 조회한다.(/halmang, /love, /history, /myth")
+    public List<TaleSpotTranslationResponse> findByCategory(@PathVariable SpotCategory category, @Parameter(hidden = true)
+                                                            @AuthPrincipal ApiMember apiMember) {
+        return spotService.findAllSpotsByCategory(category, apiMember);
+    }
+
 }
