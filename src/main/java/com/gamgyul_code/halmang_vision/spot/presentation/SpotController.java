@@ -49,7 +49,7 @@ public class SpotController {
     }
 
     @GetMapping("/tale/{category}")
-    @Operation(summary = "설화별 관광지 목록 조회", description = "설화별 관광지를 조회한다.(/halmang, /love, /history, /myth")
+    @Operation(summary = "설화별 관광지 목록 조회", description = "설화별 관광지를 조회한다.(/halmang, /love, /history, /myth)")
     public List<TaleSpotTranslationResponse> findByCategory(@PathVariable SpotCategory category, @Parameter(hidden = true)
                                                             @AuthPrincipal ApiMember apiMember) {
         return spotService.findAllSpotsByCategory(category, apiMember);
