@@ -31,7 +31,7 @@ public class Route extends BaseTimeEntity {
     private Long id;
 
     @Size(max = 15)
-    private String routeName; // TODO : 중복 불가
+    private String routeName; // TODO : 해당 멤버 기준 중복 불가
 
     @ManyToOne
     @JoinColumn(name = "member_id")
