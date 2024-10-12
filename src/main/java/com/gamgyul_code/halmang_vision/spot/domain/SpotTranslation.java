@@ -62,7 +62,8 @@ public class SpotTranslation extends BaseTimeEntity {
     private String caution;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String simpleLocation;
+    @Size(max = 15)
+    private String simpleExplanation;
 
     @ManyToOne
     @JoinColumn(name = "spot_id")
