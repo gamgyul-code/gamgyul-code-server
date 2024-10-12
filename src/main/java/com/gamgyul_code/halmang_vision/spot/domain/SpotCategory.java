@@ -7,7 +7,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 
 public enum SpotCategory {
-    HALMANG, LOVE, HISTORY, MYTH;
+
+    halmang, love, history, myth;
 
     @JsonCreator
     public static SpotCategory from(String value) {
