@@ -1,6 +1,5 @@
 package com.gamgyul_code.halmang_vision.spot.dto;
 
-import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
@@ -24,7 +23,7 @@ public class SpotDto {
         @Schema(description = "관광지 이름", example = "성산일출봉")
         private String name;
 
-        @Schema(description = "관광지 카테고리", example = "HISTORY")
+        @Schema(description = "관광지 카테고리", example = "halmang")
         private SpotCategory spotCategory;
 
         @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
@@ -84,8 +83,8 @@ public class SpotDto {
         @Schema(description = "주의사항", example = "화산섬이므로 주변 지역은 화산재로 이루어져 있습니다. 주변 지역은 화산재로 이루어져 있으므로 발을 다치지 않도록 주의하세요.")
         private String caution;
 
-        @Schema(description = "간단한 위치 설명", example = "성산읍 일출로 284-12")
-        private String simpleLocation;
+        @Schema(description = "관광지 간단 설명", example = "설문대할망이 태어난 장소")
+        private String simpleExplanation;
 
         public SpotTranslation toEntity(Spot spot) {
             return SpotTranslation.builder()
@@ -98,7 +97,7 @@ public class SpotDto {
                     .historyStory(historyStory)
                     .topographyStory(topographyStory)
                     .caution(caution)
-                    .simpleLocation(simpleLocation)
+                    .simpleExplanation(simpleExplanation)
                     .spot(spot)
                     .build();
         }
@@ -108,7 +107,7 @@ public class SpotDto {
     @Builder
     @AllArgsConstructor
     @Schema(description = "관광지 상세 정보(번역) 요청")
-    public static class SpotTranslationResponse {
+    public static class SpotTranslationDetailResponse {
 
         @Schema(description = "관광지 번역 id", example = "1")
         private Long id;
@@ -155,14 +154,11 @@ public class SpotDto {
         @Schema(description = "주의사항", example = "화산섬이므로 주변 지역은 화산재로 이루어져 있습니다. 주변 지역은 화산재로 이루어져 있으므로 발을 다치지 않도록 주의하세요.")
         private String caution;
 
-        @Schema(description = "간단한 위치 설명", example = "성산읍 일출로 284-12")
-        private String simpleLocation;
-
         @Schema(description = "북마크 여부", example = "true")
         private boolean bookmarked;
 
-        public static SpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
-            return SpotTranslationResponse.builder()
+        public static SpotTranslationDetailResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
+            return SpotTranslationDetailResponse.builder()
                     .id(spotTranslation.getId())
                     .spotCategory(spotTranslation.getSpot().getSpotCategory())
                     .imgUrl(spotTranslation.getSpot().getImgUrl())
@@ -178,9 +174,40 @@ public class SpotDto {
                     .historyStory(spotTranslation.getHistoryStory())
                     .topographyStory(spotTranslation.getTopographyStory())
                     .caution(spotTranslation.getCaution())
-                    .simpleLocation(spotTranslation.getSimpleLocation())
                     .bookmarked(isBookmarked)
                     .build();
         }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "설화별 관광지 목록(번역) 요청")
+    public static class TaleSpotTranslationResponse {
+
+            @Schema(description = "관광지 번역 id", example = "1")
+            private Long id;
+
+            @Schema(description = "관광지 이름", example = "성산일출봉")
+            private String name;
+
+            @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
+            private String imgUrl;
+
+            @Schema(description = "관광지 간단 설명", example = "설문대할망이 태어난 장소")
+            private String simpleExplanation;
+
+            @Schema(description = "북마크 여부", example = "true")
+            private boolean bookmarked;
+
+            public static TaleSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
+                return TaleSpotTranslationResponse.builder()
+                        .id(spotTranslation.getId())
+                        .name(spotTranslation.getName())
+                        .imgUrl(spotTranslation.getSpot().getImgUrl())
+                        .simpleExplanation(spotTranslation.getSimpleExplanation())
+                        .bookmarked(isBookmarked) //FIXME: 북마크 개발 후 수정
+                        .build();
+            }
     }
 }
