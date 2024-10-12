@@ -1,12 +1,12 @@
 version: 0.0
 os: linux
 files:
-    - source: /build/libs/
-      destination: /home/ubuntu/gamgyul-code-server/build/libs/
+    - source: /
+      destination: /home/ubuntu/gamgyul-code-server/
 file_exists_behavior: OVERWRITE
 
 permissions:
-    - object: /build/libs/
+    - object: /
       pattern: '**'
       owner: root
       group: root
