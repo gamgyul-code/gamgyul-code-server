@@ -8,16 +8,20 @@ import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOU
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
+import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRepository;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
-import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.TaleSpotTranslationResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,13 +73,30 @@ public class SpotService {
     }
 
     @Transactional(readOnly = true)
-    public SpotTranslationResponse findById(Long spotId, ApiMember apiMember) {
+    public SpotTranslationDetailResponse findById(Long spotId, ApiMember apiMember) {
         SpotTranslation spotTranslation = spotTranslationRepository.findById(spotId)
                 .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
 
         long memberId = apiMember.toMember(memberRepository).getId();
         boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotId);
 
-        return SpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
+        return SpotTranslationDetailResponse.fromEntity(spotTranslation, isBookmarked);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TaleSpotTranslationResponse> findAllSpotsByCategory(SpotCategory spotCategory, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        LanguageCode languageCode = member.getLanguageCode();
+
+        List<SpotTranslation> spotTranslations =
+                spotTranslationRepository.findAllBySpot_SpotCategoryAndLanguageCode(spotCategory, languageCode);
+
+        return spotTranslations.stream()
+                .map(spotTranslation -> {
+                    long memberId = member.getId();
+                    boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
+                    return TaleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
+                })
+                .toList();
     }
 }
