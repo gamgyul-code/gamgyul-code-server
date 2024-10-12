@@ -13,6 +13,10 @@ BUILD_JAR=$(ls "$JAR_PATH")
 JAR_NAME=$(basename "$BUILD_JAR")
 
 echo "===== 배포 시작 : $(date +%c) =====" >> "$DEPLOY_LOG_PATH"
+echo "PROJECT_PATH: $PROJECT_PATH >> "$DEPLOY_LOG_PATH"
+echo "BUILD_PATH: $BUILD_PATH >> "$DEPLOY_LOG_PATH"
+echo "JAR_PATH: $JAR_PATH >> "$DEPLOY_LOG_PATH"
+echo "BUILD_JAR: $BUILD_JAR >> "$DEPLOY_LOG_PATH"
 echo "> build 파일명: $JAR_NAME" >> "$DEPLOY_LOG_PATH"
 echo "> build 파일 복사" >> "$DEPLOY_LOG_PATH"
 cp "$BUILD_JAR" "$BUILD_PATH"
