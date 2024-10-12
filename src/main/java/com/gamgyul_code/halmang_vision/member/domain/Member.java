@@ -33,7 +33,8 @@ public class Member {
 
     private String username;
 
-    private LanguageCode languageCode = LanguageCode.KOR; //TODO: 언어 선택 API 구현 필
+    @Enumerated(value = EnumType.STRING)
+    private LanguageCode languageCode; //TODO: 언어 선택 API 구현 필
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
