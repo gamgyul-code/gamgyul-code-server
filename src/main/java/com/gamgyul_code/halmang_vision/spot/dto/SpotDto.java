@@ -106,11 +106,14 @@ public class SpotDto {
     @Data
     @Builder
     @AllArgsConstructor
-    @Schema(description = "관광지 상세 정보(번역) 요청")
+    @Schema(description = "관광지 상세 정보(번역) 응답")
     public static class SpotTranslationDetailResponse {
 
         @Schema(description = "관광지 번역 id", example = "1")
-        private Long id;
+        private Long spotTranslationId;
+
+        @Schema(description = "관광지 id(번역 이전)", example = "1")
+        private Long spotId;
 
         @Schema(description = "관광지 카테고리", example = "HISTORY")
         private SpotCategory spotCategory;
@@ -159,7 +162,8 @@ public class SpotDto {
 
         public static SpotTranslationDetailResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
             return SpotTranslationDetailResponse.builder()
-                    .id(spotTranslation.getId())
+                    .spotTranslationId(spotTranslation.getId())
+                    .spotId(spotTranslation.getSpot().getId())
                     .spotCategory(spotTranslation.getSpot().getSpotCategory())
                     .imgUrl(spotTranslation.getSpot().getImgUrl())
                     .travelerStatistics(spotTranslation.getSpot().getTravelerStatistics())
@@ -182,11 +186,14 @@ public class SpotDto {
     @Data
     @Builder
     @AllArgsConstructor
-    @Schema(description = "설화별 관광지 목록(번역) 요청")
+    @Schema(description = "설화별 관광지 목록(번역) 응답")
     public static class TaleSpotTranslationResponse {
 
             @Schema(description = "관광지 번역 id", example = "1")
-            private Long id;
+            private Long spotTranslationId;
+
+            @Schema(description = "관광지 id(번역 이전)", example = "1")
+            private Long spotId;
 
             @Schema(description = "관광지 이름", example = "성산일출봉")
             private String name;
@@ -202,7 +209,8 @@ public class SpotDto {
 
             public static TaleSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
                 return TaleSpotTranslationResponse.builder()
-                        .id(spotTranslation.getId())
+                        .spotTranslationId(spotTranslation.getId())
+                        .spotId(spotTranslation.getSpot().getId())
                         .name(spotTranslation.getName())
                         .imgUrl(spotTranslation.getSpot().getImgUrl())
                         .simpleExplanation(spotTranslation.getSimpleExplanation())
