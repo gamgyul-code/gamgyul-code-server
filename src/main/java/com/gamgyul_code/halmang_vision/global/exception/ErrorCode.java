@@ -29,7 +29,8 @@ public enum ErrorCode {
     // 409 Conflict
     ALREADY_EXIST_SPOT(CONFLICT, "이미 존재하는 관광지입니다."),
     ALREADY_EXIST_SPOT_TRANSLATION(CONFLICT, "이미 존재하는 관광지 번역입니다."),
-    ALREADY_EXIST_SPOT_TRANSLATION_NAME(CONFLICT, "이미 존재하는 번역된 관광지 이름입니다.");
+    ALREADY_EXIST_SPOT_TRANSLATION_NAME(CONFLICT, "이미 존재하는 번역된 관광지 이름입니다."),
+    ALREADY_BOOKMARKED(CONFLICT, "이미 저장한 관광지입니다.");
 
     // 500 Internal Server Error
 
