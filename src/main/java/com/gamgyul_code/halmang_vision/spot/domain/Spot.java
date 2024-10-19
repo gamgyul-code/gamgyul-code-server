@@ -4,13 +4,16 @@ import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
 import com.gamgyul_code.halmang_vision.global.utils.BaseTimeEntity;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,7 +45,10 @@ public class Spot extends BaseTimeEntity {
 
     @Enumerated(value = EnumType.STRING)
     @NotNull
-    private SpotCategory spotCategory; // TODO : 리스트로 만들어야 함. 교집합 카테고리 가능
+    @ElementCollection
+    @CollectionTable(name = "spot_categories", joinColumns = @JoinColumn(name = "spot_id"))
+    @Column(name = "category")
+    private List<SpotCategory> spotCategory;
 
     @Enumerated(value = EnumType.STRING)
     @NotNull

@@ -8,6 +8,7 @@ import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.TravelerStatistics;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class SpotDto {
         private String name;
 
         @Schema(description = "관광지 카테고리", example = "halmang")
-        private SpotCategory spotCategory;
+        private List<SpotCategory> spotCategory;
 
         @Schema(description = "관광지 지역", example = "JEJU_CITY")
         private SpotRegion spotRegion;
@@ -123,7 +124,7 @@ public class SpotDto {
         private Long spotId;
 
         @Schema(description = "관광지 카테고리", example = "HISTORY")
-        private SpotCategory spotCategory;
+        private List<SpotCategory> spotCategory;
 
         @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;

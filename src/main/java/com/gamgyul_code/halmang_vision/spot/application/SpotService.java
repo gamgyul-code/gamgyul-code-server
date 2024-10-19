@@ -94,7 +94,7 @@ public class SpotService {
         LanguageCode languageCode = member.getLanguageCode();
 
         List<SpotTranslation> spotTranslations =
-                spotTranslationRepository.findAllBySpot_SpotCategoryAndLanguageCode(spotCategory, languageCode);
+                spotTranslationRepository.findAllBySpotCategoryAndLanguageCode(spotCategory, languageCode);
 
         return spotTranslations.stream()
                 .map(spotTranslation -> {
