@@ -125,12 +125,15 @@ public class SpotService {
     }
 
     @Transactional(readOnly = true)
-    public List<SimpleSpotTranslationResponse> findAllSpotsByRegion(SpotRegion spotRegion, ApiMember apiMember) {
+    public List<SimpleSpotTranslationResponse> findAllSpotsByRegion(String spotRegion, ApiMember apiMember) {
         Member member = apiMember.toMember(memberRepository);
         LanguageCode languageCode = member.getLanguageCode();
 
+        spotRegion = spotRegion.replace("-", "_").toUpperCase();
+        SpotRegion spotRegionEnum = SpotRegion.valueOf(spotRegion);
+
         List<SpotTranslation> spotTranslations =
-                spotTranslationRepository.findAllBySpot_SpotRegionAndLanguageCode(spotRegion, languageCode);
+                spotTranslationRepository.findAllBySpot_SpotRegionAndLanguageCode(spotRegionEnum, languageCode);
 
         return spotTranslations.stream()
                 .map(spotTranslation -> {

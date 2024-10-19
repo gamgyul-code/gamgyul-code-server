@@ -63,9 +63,9 @@ public class SpotController {
     }
 
     @GetMapping("/regions/{spotRegion}")
-    @Operation(summary = "지역별 관광지 목록 조회", description = "지역별 관광지를 조회한다. (WESTERN_JEJU_CITY, JEJU_CITY,"
-            + " EASTERN_JEJU_CITY, WESTERN_SEOGWIPO_CITY, SEOGWIPO_CITY, EASTERN_SEOGWIPO_CITY)")
-    public List<SimpleSpotTranslationResponse> findByRegion(@PathVariable SpotRegion spotRegion, @Parameter(hidden = true)
+    @Operation(summary = "지역별 관광지 목록 조회", description = "지역별 관광지를 조회한다. (western-jeju-city, jeju-city, eastern-jeju-city,"
+            + "western-seogwipo-city, seogwipo-city, eastern-seogwipo-city)")
+    public List<SimpleSpotTranslationResponse> findByRegion(@PathVariable String spotRegion, @Parameter(hidden = true)
                                                         @AuthPrincipal ApiMember apiMember) {
         return spotService.findAllSpotsByRegion(spotRegion, apiMember);
     }
