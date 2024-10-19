@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
     NOT_FOUND_SPOT(NOT_FOUND, "해당 관광지를 찾을 수 없습니다."),
     NOT_FOUND_SPOT_TRANSLATION(NOT_FOUND, "해당 관광지 번역을 찾을 수 없습니다."),
+    NOT_FOUND_BOOKMARK(NOT_FOUND, "해당 북마크를 찾을 수 없습니다."),
 
     // 409 Conflict
     ALREADY_EXIST_SPOT(CONFLICT, "이미 존재하는 관광지입니다."),
