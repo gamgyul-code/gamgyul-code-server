@@ -6,6 +6,7 @@ import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
 
+import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
@@ -20,7 +21,7 @@ import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRepository;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
-import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.TaleSpotTranslationResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SimpleSpotTranslationResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -84,7 +85,7 @@ public class SpotService {
     }
 
     @Transactional(readOnly = true)
-    public List<TaleSpotTranslationResponse> findAllSpotsByCategory(SpotCategory spotCategory, ApiMember apiMember) {
+    public List<SimpleSpotTranslationResponse> findAllSpotsByCategory(SpotCategory spotCategory, ApiMember apiMember) {
         Member member = apiMember.toMember(memberRepository);
         LanguageCode languageCode = member.getLanguageCode();
 
@@ -95,7 +96,26 @@ public class SpotService {
                 .map(spotTranslation -> {
                     long memberId = member.getId();
                     boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
-                    return TaleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
+                    return SimpleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
+                })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SimpleSpotTranslationResponse> findAllSpotsByBookmark(ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        Long memberId = member.getId();
+        LanguageCode languageCode = member.getLanguageCode();
+
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByMemberId(memberId);
+
+        return bookmarks.stream()
+                .map(bookmark -> {
+                    Spot spot = bookmark.getSpot();
+                    SpotTranslation spotTranslation = spotTranslationRepository.findBySpotAndLanguageCode(spot, languageCode)
+                            .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
+
+                    return SimpleSpotTranslationResponse.fromEntity(spotTranslation, true);
                 })
                 .toList();
     }
