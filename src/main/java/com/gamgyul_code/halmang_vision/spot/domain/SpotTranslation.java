@@ -39,6 +39,10 @@ public class SpotTranslation extends BaseTimeEntity {
     @NotNull
     private LanguageCode languageCode;
 
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    private SpotTranslationRegion spotTranslationRegion;
+
     @NotBlank
     private String summary; //  TODO : xxx 관련 장소 - 로 Enum
 
