@@ -7,7 +7,7 @@ import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
-import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.TaleSpotTranslationResponse;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SimpleSpotTranslationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,9 +50,14 @@ public class SpotController {
 
     @GetMapping("/tale/{category}")
     @Operation(summary = "설화별 관광지 목록 조회", description = "설화별 관광지를 조회한다.(/halmang, /love, /history, /myth)")
-    public List<TaleSpotTranslationResponse> findByCategory(@PathVariable SpotCategory category, @Parameter(hidden = true)
+    public List<SimpleSpotTranslationResponse> findByCategory(@PathVariable SpotCategory category, @Parameter(hidden = true)
                                                             @AuthPrincipal ApiMember apiMember) {
         return spotService.findAllSpotsByCategory(category, apiMember);
     }
 
+    @GetMapping("/bookmarks")
+    @Operation(summary = "즐겨찾기한 관광지 목록 조회", description = "즐겨찾기한 관광지를 조회한다.")
+    public List<SimpleSpotTranslationResponse> findByBookmarks(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        return spotService.findAllSpotsByBookmark(apiMember);
+    }
 }
