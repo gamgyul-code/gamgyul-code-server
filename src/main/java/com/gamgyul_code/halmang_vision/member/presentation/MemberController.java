@@ -67,7 +67,7 @@ public class MemberController {
     }
 
     @GetMapping("/language/{code}")
-    @Operation(summary = "사용자 언어 변경", description = "사용자의 언어를 변경합니다. (kor, eng, chn, jpn)")
+    @Operation(summary = "사용자 언어 변경", description = "사용자의 언어를 변경합니다. (kor, eng, chn, jpn) (회원 가입 후 바로 설정 필요)")
     public void updateLanguageCode(@PathVariable String code, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         memberService.updateLanguageCode(code, apiMember);
     }
