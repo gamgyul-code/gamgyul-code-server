@@ -3,7 +3,9 @@ package com.gamgyul_code.halmang_vision.spot.dto;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.TravelerStatistics;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,9 @@ public class SpotDto {
         @Schema(description = "관광지 카테고리", example = "halmang")
         private SpotCategory spotCategory;
 
+        @Schema(description = "관광지 지역", example = "JEJU_CITY")
+        private SpotRegion spotRegion;
+
         @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;
 
@@ -42,6 +47,7 @@ public class SpotDto {
             return Spot.builder()
                     .name(name)
                     .spotCategory(spotCategory)
+                    .spotRegion(spotRegion)
                     .imgUrl(imgUrl)
                     .travelerStatistics(travelerStatistics)
                     .openingHours(openingHours)
@@ -61,6 +67,9 @@ public class SpotDto {
 
         @Schema(description = "언어 코드", example = "KOR")
         private LanguageCode languageCode;
+
+        @Schema(description = "번역 지역", example = "ENG_WESTERN_JEJU_CITY")
+        private SpotTranslationRegion spotTranslationRegion;
 
         @Schema(description = "요약", example = "역사 관련 장소")
         private String summary;
@@ -90,6 +99,7 @@ public class SpotDto {
             return SpotTranslation.builder()
                     .name(name)
                     .languageCode(languageCode)
+                    .spotTranslationRegion(spotTranslationRegion)
                     .summary(summary)
                     .address(address)
                     .fee(fee)
