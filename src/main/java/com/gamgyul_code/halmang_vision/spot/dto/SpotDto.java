@@ -186,8 +186,8 @@ public class SpotDto {
     @Data
     @Builder
     @AllArgsConstructor
-    @Schema(description = "설화별 관광지 목록(번역) 응답")
-    public static class TaleSpotTranslationResponse {
+    @Schema(description = "간단한 관광지 정보(번역) 응답")
+    public static class SimpleSpotTranslationResponse {
 
             @Schema(description = "관광지 번역 id", example = "1")
             private Long spotTranslationId;
@@ -207,14 +207,14 @@ public class SpotDto {
             @Schema(description = "북마크 여부", example = "true")
             private boolean bookmarked;
 
-            public static TaleSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
-                return TaleSpotTranslationResponse.builder()
+            public static SimpleSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
+                return SimpleSpotTranslationResponse.builder()
                         .spotTranslationId(spotTranslation.getId())
                         .spotId(spotTranslation.getSpot().getId())
                         .name(spotTranslation.getName())
                         .imgUrl(spotTranslation.getSpot().getImgUrl())
                         .simpleExplanation(spotTranslation.getSimpleExplanation())
-                        .bookmarked(isBookmarked) //FIXME: 북마크 개발 후 수정
+                        .bookmarked(isBookmarked)
                         .build();
             }
     }
