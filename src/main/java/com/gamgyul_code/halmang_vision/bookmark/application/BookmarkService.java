@@ -1,6 +1,8 @@
 package com.gamgyul_code.halmang_vision.bookmark.application;
 
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_BOOKMARKED;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_BOOKMARK;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkGenerator;
@@ -27,19 +29,39 @@ public class BookmarkService {
 
     @Transactional
     public void createSpotBookmark(long spotId, ApiMember apiMember) {
-        // 번역된 관광지 존재 여부 예외 처리
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
-
-        // 멤버 예외 처리
         Member member = apiMember.toMember(memberRepository);
+        Spot spot = findSpotById(spotId);
 
-        boolean isAlreadyBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(member.getId(), spot.getId());
-
-        if (isAlreadyBookmarked) {
-            throw new HalmangVisionException(ALREADY_BOOKMARKED);
-        }
+        validateBookmarkExists(member, spot, false);
 
         bookmarkRepository.save(bookmarkGenerator.generate(spot, member));
+    }
+
+    @Transactional
+    public void deleteSpotBookmark(long spotId, ApiMember apiMember) {
+
+        Member member = apiMember.toMember(memberRepository);
+        Spot spot = findSpotById(spotId);
+
+        validateBookmarkExists(member, spot, true);
+
+        bookmarkRepository.deleteByMemberIdAndSpotId(member.getId(), spot.getId());
+    }
+
+    private Spot findSpotById(Long spotId) {
+        return spotRepository.findById(spotId)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT));
+    }
+
+    private void validateBookmarkExists(Member member, Spot spot, boolean shouldExist) {
+        boolean isAlreadyBookmarked = bookmarkRepository
+                .existsBookmarkByMemberIdAndSpotId(member.getId(), spot.getId());
+
+        if (shouldExist && !isAlreadyBookmarked) {
+            throw new HalmangVisionException(NOT_FOUND_BOOKMARK);
+        }
+        if (!shouldExist && isAlreadyBookmarked) {
+            throw new HalmangVisionException(ALREADY_BOOKMARKED);
+        }
     }
 }
