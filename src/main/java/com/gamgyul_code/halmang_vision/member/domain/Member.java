@@ -41,4 +41,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Route> routes = new ArrayList<>();
+
+    public void setLanguageCode(LanguageCode languageCode) {
+        this.languageCode = languageCode;
+    }
 }
