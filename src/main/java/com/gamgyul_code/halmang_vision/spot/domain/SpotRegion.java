@@ -1,6 +1,6 @@
 package com.gamgyul_code.halmang_vision.spot.domain;
 
-import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_SPOT_CATEGORY;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_SPOT_REGION;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -17,7 +17,7 @@ public enum SpotRegion {
                 return spotRegion;
             }
         }
-        throw new HalmangVisionException(INVALID_SPOT_CATEGORY); //TODO: 커스텀 에러 구현
+        throw new HalmangVisionException(INVALID_SPOT_REGION);
     }
 
     @JsonValue
