@@ -4,6 +4,7 @@ import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.application.SpotService;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotRegion;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
@@ -59,5 +60,13 @@ public class SpotController {
     @Operation(summary = "즐겨찾기한 관광지 목록 조회", description = "즐겨찾기한 관광지를 조회한다.")
     public List<SimpleSpotTranslationResponse> findByBookmarks(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         return spotService.findAllSpotsByBookmark(apiMember);
+    }
+
+    @GetMapping("/regions/{spotRegion}")
+    @Operation(summary = "지역별 관광지 목록 조회", description = "지역별 관광지를 조회한다. (WESTERN_JEJU_CITY, JEJU_CITY,"
+            + " EASTERN_JEJU_CITY, WESTERN_SEOGWIPO_CITY, SEOGWIPO_CITY, EASTERN_SEOGWIPO_CITY)")
+    public List<SimpleSpotTranslationResponse> findByRegion(@PathVariable SpotRegion spotRegion, @Parameter(hidden = true)
+                                                        @AuthPrincipal ApiMember apiMember) {
+        return spotService.findAllSpotsByRegion(spotRegion, apiMember);
     }
 }
