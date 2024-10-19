@@ -68,9 +68,6 @@ public class SpotDto {
         @Schema(description = "언어 코드", example = "KOR")
         private LanguageCode languageCode;
 
-        @Schema(description = "번역 지역", example = "ENG_WESTERN_JEJU_CITY")
-        private SpotTranslationRegion spotTranslationRegion;
-
         @Schema(description = "요약", example = "역사 관련 장소")
         private String summary;
 
@@ -95,7 +92,7 @@ public class SpotDto {
         @Schema(description = "관광지 간단 설명", example = "설문대할망이 태어난 장소")
         private String simpleExplanation;
 
-        public SpotTranslation toEntity(Spot spot) {
+        public SpotTranslation toEntity(Spot spot, SpotTranslationRegion spotTranslationRegion) {
             return SpotTranslation.builder()
                     .name(name)
                     .languageCode(languageCode)

@@ -15,8 +15,10 @@ import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRepository;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
@@ -67,7 +69,9 @@ public class SpotService {
             throw new HalmangVisionException(ALREADY_EXIST_SPOT_TRANSLATION_NAME);
         }
 
-        SpotTranslation spotTranslation = createSpotTranslationRequest.toEntity(spot);
+        SpotTranslationRegion spotTranslationRegion = SpotTranslationRegion.from(languageCode, spot.getSpotRegion());
+
+        SpotTranslation spotTranslation = createSpotTranslationRequest.toEntity(spot, spotTranslationRegion);
 
         spotTranslationRepository.save(spotTranslation);
 
@@ -116,6 +120,23 @@ public class SpotService {
                             .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
 
                     return SimpleSpotTranslationResponse.fromEntity(spotTranslation, true);
+                })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SimpleSpotTranslationResponse> findAllSpotsByRegion(SpotRegion spotRegion, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        LanguageCode languageCode = member.getLanguageCode();
+
+        List<SpotTranslation> spotTranslations =
+                spotTranslationRepository.findAllBySpot_SpotRegionAndLanguageCode(spotRegion, languageCode);
+
+        return spotTranslations.stream()
+                .map(spotTranslation -> {
+                    long memberId = member.getId();
+                    boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
+                    return SimpleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
                 })
                 .toList();
     }

@@ -5,6 +5,7 @@ import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -57,5 +58,12 @@ public enum SpotTranslationRegion {
     @JsonValue
     public String toValue() {
         return this.name();
+    }
+
+    public static SpotTranslationRegion from(LanguageCode languageCode, SpotRegion spotRegion) {
+        return Arrays.stream(values())
+                .filter(region -> region.languageCode == languageCode && region.spotRegion == spotRegion)
+                .findFirst()
+                .orElseThrow(() -> new HalmangVisionException(INVALID_SPOT_TRANSLATION_REGION));
     }
 }
