@@ -44,6 +44,10 @@ public class Spot extends BaseTimeEntity {
     @NotNull
     private SpotCategory spotCategory; // TODO : 리스트로 만들어야 함. 교집합 카테고리 가능
 
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    private SpotRegion spotRegion;
+
     private String imgUrl;
 
     @Enumerated(value = EnumType.STRING)

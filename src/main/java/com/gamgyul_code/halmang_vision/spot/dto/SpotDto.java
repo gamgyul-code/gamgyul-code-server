@@ -3,7 +3,9 @@ package com.gamgyul_code.halmang_vision.spot.dto;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.TravelerStatistics;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,9 @@ public class SpotDto {
         @Schema(description = "관광지 카테고리", example = "halmang")
         private SpotCategory spotCategory;
 
+        @Schema(description = "관광지 지역", example = "JEJU_CITY")
+        private SpotRegion spotRegion;
+
         @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;
 
@@ -42,6 +47,7 @@ public class SpotDto {
             return Spot.builder()
                     .name(name)
                     .spotCategory(spotCategory)
+                    .spotRegion(spotRegion)
                     .imgUrl(imgUrl)
                     .travelerStatistics(travelerStatistics)
                     .openingHours(openingHours)
@@ -86,10 +92,11 @@ public class SpotDto {
         @Schema(description = "관광지 간단 설명", example = "설문대할망이 태어난 장소")
         private String simpleExplanation;
 
-        public SpotTranslation toEntity(Spot spot) {
+        public SpotTranslation toEntity(Spot spot, SpotTranslationRegion spotTranslationRegion) {
             return SpotTranslation.builder()
                     .name(name)
                     .languageCode(languageCode)
+                    .spotTranslationRegion(spotTranslationRegion)
                     .summary(summary)
                     .address(address)
                     .fee(fee)

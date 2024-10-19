@@ -12,4 +12,6 @@ public interface SpotTranslationRepository extends JpaRepository<SpotTranslation
     boolean existsBySpotIdAndLanguageCode(Long spotId, LanguageCode languageCode);
 
     List<SpotTranslation> findAllBySpot_SpotCategoryAndLanguageCode(SpotCategory spotCategory, LanguageCode languageCode);
+
+    List<SpotTranslation> findAllBySpot_SpotRegionAndLanguageCode(SpotRegion spotRegion, LanguageCode languageCode);
 }
