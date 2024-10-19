@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_TRAVELER_STATISTICS(BAD_REQUEST, "유효하지 않은 여행자 통계입니다."),
     INVALID_SPOT_CATEGORY(BAD_REQUEST, "유효하지 않은 관광지 카테고리입니다."),
     INVALID_SPOT_REGION(BAD_REQUEST, "유효하지 않은 관광지 지역입니다."),
+    INVALID_SPOT_TRANSLATION_REGION(BAD_REQUEST, "유효하지 않은 관광지 번역 지역입니다."),
     // 401 Unauthorized
 
     // 403 Forbidden
