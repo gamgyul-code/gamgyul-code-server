@@ -1,5 +1,9 @@
 package com.gamgyul_code.halmang_vision.member.application;
 
+import com.gamgyul_code.halmang_vision.member.domain.Member;
+import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
+import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
+import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +21,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final MemberRepository memberRepository;
+
     public RedirectView logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         if (authentication != null) {
@@ -25,6 +31,16 @@ public class MemberService {
 
         clearCookies(request, response);
         return new RedirectView("/");
+    }
+
+    @Transactional
+    public void updateLanguageCode(String languageCode, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        languageCode = languageCode.toUpperCase();
+        LanguageCode enumLanguageCode = LanguageCode.valueOf(languageCode);
+
+        member.setLanguageCode(enumLanguageCode);
     }
 
     private void clearCookies(HttpServletRequest request, HttpServletResponse response) {

@@ -34,11 +34,15 @@ public class Member {
     private String username;
 
     @Enumerated(value = EnumType.STRING)
-    private LanguageCode languageCode; //TODO: 언어 선택 API 구현 필
+    private LanguageCode languageCode;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Route> routes = new ArrayList<>();
+
+    public void setLanguageCode(LanguageCode languageCode) {
+        this.languageCode = languageCode;
+    }
 }

@@ -1,9 +1,11 @@
 package com.gamgyul_code.halmang_vision.member.presentation;
 
+import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.application.MemberService;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +55,7 @@ public class MemberController {
 
     @GetMapping("/test")
     @Operation(summary = "로그인 테스트", description = "accessToken을 헤더에 담아 보내면 접속 가능한 테스트용 API")
-    public String test(ApiMember apiMember) {
+    public String test(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         apiMember.toMember(memberRepository);
         return "로그인 성공";
     }
@@ -61,5 +64,11 @@ public class MemberController {
     @Operation(summary = "원격 연결 테스트", description = "원격 연결 테스트용 API")
     public String test2() {
         return "원격 연결 성공";
+    }
+
+    @GetMapping("/language/{code}")
+    @Operation(summary = "사용자 언어 변경", description = "사용자의 언어를 변경합니다. (kor, eng, chn, jpn) (회원 가입 후 바로 설정 필요)")
+    public void updateLanguageCode(@PathVariable String code, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        memberService.updateLanguageCode(code, apiMember);
     }
 }
