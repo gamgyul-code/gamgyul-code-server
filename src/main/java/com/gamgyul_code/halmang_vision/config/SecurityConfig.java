@@ -74,6 +74,27 @@ public class SecurityConfig {
         configuration.addAllowedOriginPattern("http://localhost:8080");
         configuration.addAllowedOriginPattern("http://localhost:3000"); // 프론트 쪽에서 허용
         configuration.addAllowedOriginPattern("http://43.200.126.36"); // 도메인 주소
+        configuration.addAllowedOriginPattern("http://43.200.126.36:8080");
+        configuration.addAllowedOriginPattern("http://43.200.126.36:3000");
+        configuration.addAllowedHeader("Accept");
+        configuration.addAllowedHeader("Authorization");
+        configuration.addAllowedHeader("refreshToken");
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("Origin");
+        configuration.addAllowedHeader("Cookie");
+        configuration.addAllowedHeader("X-Requested-With");
+        configuration.addAllowedHeader("Access-Control-Allow-Origin");
+        configuration.addAllowedHeader("Access-Control-Allow-Credentials");
+        configuration.addAllowedHeader("Access-Control-Allow-Methods");
+        configuration.addAllowedHeader("Access-Control-Allow-Headers");
+        configuration.addAllowedHeader("Host");
+        configuration.addAllowedHeader("Connection");
+        configuration.addAllowedHeader("Accept-Encoding");
+        configuration.addAllowedHeader("Accept-Language");
+        configuration.addAllowedHeader("Referer");
+        configuration.addAllowedHeader("User-Agent");
+        configuration.addAllowedHeader("Sec-Fetch-Mode");
+        configuration.addAllowedHeader("Sec-Fetch-Site");;
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("refreshToken");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
