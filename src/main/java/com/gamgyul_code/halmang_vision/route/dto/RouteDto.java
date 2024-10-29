@@ -4,6 +4,7 @@ import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -69,6 +70,58 @@ public class RouteDto {
                     .id(route.getId())
                     .routeName(route.getRouteName())
                     .imgUrl(route.getRouteSpots().get(0).getSpot().getImgUrl())
+                    .build();
+        }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "내가 만든 경로 상세 조회")
+    public static class MyRouteDetailResponse {
+
+        @Schema(description = "경로 ID", example = "1")
+        private Long id;
+
+        @Schema(description = "경로 이름", example = "나의 경로")
+        private String routeName;
+
+        @Schema(description = "루트 내 관광지 리스트", example = "[{spotId: 1, spotName: '성산일출봉', imgUrl: 'http://~~~.com/~~~.jpg'}, ...]")
+        private List<RouteSpotResponse> routeSpots;
+
+        public static MyRouteDetailResponse fromEntity(Route route, List<RouteSpotResponse> routeSpots) {
+            return MyRouteDetailResponse.builder()
+                    .id(route.getId())
+                    .routeName(route.getRouteName())
+                    .routeSpots(routeSpots)
+                    .build();
+        }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "경로 내 관광지 정보")
+    public static class RouteSpotResponse {
+
+        @Schema(description = "관광지 ID", example = "1")
+        private Long spotId;
+
+        @Schema(description = "관광지 번역 ID", example = "1")
+        private Long spotTranslationId;
+
+        @Schema(description = "관광지 이름", example = "성산일출봉")
+        private String spotName;
+
+        @Schema(description = "관광지 간단 설명", example = "설문대할망이 태어난 장소")
+        private String simpleExplanation;
+
+        public static RouteSpotResponse fromEntity(SpotTranslation spotTranslation) {
+            return RouteSpotResponse.builder()
+                    .spotId(spotTranslation.getSpot().getId())
+                    .spotTranslationId(spotTranslation.getId())
+                    .spotName(spotTranslation.getName())
+                    .simpleExplanation(spotTranslation.getSimpleExplanation())
                     .build();
         }
     }
