@@ -19,6 +19,8 @@ public enum ErrorCode {
     INVALID_SPOT_CATEGORY(BAD_REQUEST, "유효하지 않은 관광지 카테고리입니다."),
     INVALID_SPOT_REGION(BAD_REQUEST, "유효하지 않은 관광지 지역입니다."),
     INVALID_SPOT_TRANSLATION_REGION(BAD_REQUEST, "유효하지 않은 관광지 번역 지역입니다."),
+    INVALID_ROUTE_SPOT_SIZE(BAD_REQUEST, "경로에 포함된 관광지는 최소 2개, 최대 6개여야 합니다."),
+    INVALID_ROUT_SPOT_ID(BAD_REQUEST, "유효하지 않은 관광지 ID입니다."),
     // 401 Unauthorized
 
     // 403 Forbidden
@@ -33,7 +35,8 @@ public enum ErrorCode {
     ALREADY_EXIST_SPOT(CONFLICT, "이미 존재하는 관광지입니다."),
     ALREADY_EXIST_SPOT_TRANSLATION(CONFLICT, "이미 존재하는 관광지 번역입니다."),
     ALREADY_EXIST_SPOT_TRANSLATION_NAME(CONFLICT, "이미 존재하는 번역된 관광지 이름입니다."),
-    ALREADY_BOOKMARKED(CONFLICT, "이미 저장한 관광지입니다.");
+    ALREADY_BOOKMARKED(CONFLICT, "이미 저장한 관광지입니다."),
+    ALREADY_EXIST_ROUTE_NAME(CONFLICT, "이미 존재하는 경로 이름입니다.");
 
     // 500 Internal Server Error
 
