@@ -3,6 +3,7 @@ package com.gamgyul_code.halmang_vision.route.application;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_EXIST_ROUTE_NAME;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_ROUTE_SPOT_SIZE;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_ROUT_SPOT_ID;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_ROUTE;
 
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
@@ -13,9 +14,12 @@ import com.gamgyul_code.halmang_vision.route.domain.RouteRepository;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotRequest;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteDetailResponse;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteResponse;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteSpotResponse;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -69,5 +73,25 @@ public class RouteService {
         return routes.stream()
                 .map(MyRouteResponse::fromEntity)
                 .toList();
+    }
+
+    public MyRouteDetailResponse findRouteDetail(Long routeId, ApiMember apiMember) {
+
+        Member member = apiMember.toMember(memberRepository);
+        Route route = routeRepository.findByIdAndMember(routeId, member)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
+
+        List<RouteSpot> routeSpots = route.getRouteSpots();
+        List<SpotTranslation> spotTranslations = routeSpots.stream()
+                .map(RouteSpot::getSpot)
+                .map(Spot::getTranslations)
+                .flatMap(List::stream)
+                .toList();
+
+        List<RouteSpotResponse> routeSpotResponses = spotTranslations.stream()
+                .map(RouteSpotResponse::fromEntity)
+                .toList();
+
+        return MyRouteDetailResponse.fromEntity(route, routeSpotResponses);
     }
 }
