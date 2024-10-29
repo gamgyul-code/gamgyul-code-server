@@ -48,4 +48,28 @@ public class RouteDto {
                     .build();
         }
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "내가 만든 경로 목록 조회")
+    public static class MyRouteResponse {
+
+        @Schema(description = "경로 ID", example = "1")
+        private Long id;
+
+        @Schema(description = "경로 이름", example = "나의 경로")
+        private String routeName;
+
+        @Schema(description = "루트 내 첫 번째 관광지의 이미지 URL", example = "http://~~~.com/~~~.jpg")
+        private String imgUrl;
+
+        public static MyRouteResponse fromEntity(Route route) {
+            return MyRouteResponse.builder()
+                    .id(route.getId())
+                    .routeName(route.getRouteName())
+                    .imgUrl(route.getRouteSpots().get(0).getSpot().getImgUrl())
+                    .build();
+        }
+    }
 }
