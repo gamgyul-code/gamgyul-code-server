@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class RouteDto {
 
@@ -49,6 +50,30 @@ public class RouteDto {
                     .build();
         }
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(description = "경로 이름 수정 요청")
+    public static class CreateRouteNameUpdateRequest {
+
+        @Schema(description = "경로 이름", example = "나의 경로")
+        private String routeName;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(description = "경로 관광지 수정 요청")
+    public static class CreateRouteSpotUpdateRequest {
+
+        @Schema(description = "경로에 포함된 관광지 Id 리스트", example = "[1, 2, 3]")
+        private List<Long> routeSpots;
+
+    }
+
 
     @Data
     @Builder
