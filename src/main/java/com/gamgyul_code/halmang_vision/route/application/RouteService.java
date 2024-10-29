@@ -13,6 +13,7 @@ import com.gamgyul_code.halmang_vision.route.domain.RouteRepository;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotRequest;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteResponse;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import java.util.List;
@@ -58,6 +59,15 @@ public class RouteService {
                 .toList();
 
         route.updateRoute(routeSpots);
+    }
 
+    public List<MyRouteResponse> findAllMyRoutes(ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        List<Route> routes = routeRepository.findAllByMember(member);
+
+        return routes.stream()
+                .map(MyRouteResponse::fromEntity)
+                .toList();
     }
 }
