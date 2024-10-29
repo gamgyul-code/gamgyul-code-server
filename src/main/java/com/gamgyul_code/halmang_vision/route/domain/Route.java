@@ -42,7 +42,16 @@ public class Route extends BaseTimeEntity {
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RouteSpot> routeSpots = new ArrayList<>();
 
-    public void updateRoute(List<RouteSpot> routeSpots) {
+    public void updateRouteName(String routeName) {
+        this.routeName = routeName;
+    }
+
+    public void initRouteSpots(List<RouteSpot> routeSpots) {
         this.routeSpots = routeSpots;
+    }
+
+    public void updateRouteSpots(List<RouteSpot> routeSpots) {
+        this.routeSpots.clear();
+        this.routeSpots.addAll(routeSpots);
     }
 }

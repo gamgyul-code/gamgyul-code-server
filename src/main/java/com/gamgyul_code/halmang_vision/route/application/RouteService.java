@@ -12,8 +12,10 @@ import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.route.domain.RouteRepository;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteNameUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotRequest;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteDetailResponse;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteResponse;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteSpotResponse;
@@ -41,19 +43,11 @@ public class RouteService {
         Member member = apiMember.toMember(memberRepository);
 
         String routeName = createRouteRequest.getRouteName();
-        if (routeRepository.existsByRouteNameAndMember(routeName, member)) {
-            throw new HalmangVisionException(ALREADY_EXIST_ROUTE_NAME);
-        }
-
         List<Long> spotIds = createRouteRequest.getRouteSpots();
-        if (spotIds.size() < MINIMUM_ROUTE_SPOT_SIZE || spotIds.size() > MAXIMUM_ROUTE_SPOT_SIZE ) {
-            throw new HalmangVisionException(INVALID_ROUTE_SPOT_SIZE);
-        }
-
         List<Spot> spots = spotRepository.findAllById(spotIds);
-        if (spots.size() != spotIds.size()) {
-            throw new HalmangVisionException(INVALID_ROUT_SPOT_ID);
-        }
+
+        validateRouteName(routeName, member);
+        validateRouteSpot(spotIds);
 
         Route route = createRouteRequest.toEntity(member);
         routeRepository.save(route);
@@ -62,7 +56,7 @@ public class RouteService {
                 .map(spot -> CreateRouteSpotRequest.toEntity(spot, route))
                 .toList();
 
-        route.updateRoute(routeSpots);
+        route.initRouteSpots(routeSpots);
     }
 
     public List<MyRouteResponse> findAllMyRoutes(ApiMember apiMember) {
@@ -93,5 +87,50 @@ public class RouteService {
                 .toList();
 
         return MyRouteDetailResponse.fromEntity(route, routeSpotResponses);
+    }
+
+    private void validateRouteSpot(List<Long> spotIds) {
+
+        if (spotIds.size() < MINIMUM_ROUTE_SPOT_SIZE || spotIds.size() > MAXIMUM_ROUTE_SPOT_SIZE ) {
+            throw new HalmangVisionException(INVALID_ROUTE_SPOT_SIZE);
+        }
+
+        List<Spot> spots = spotRepository.findAllById(spotIds);
+        if (spots.size() != spotIds.size()) {
+            throw new HalmangVisionException(INVALID_ROUT_SPOT_ID);
+        }
+    }
+
+    private void validateRouteName(String routeName, Member member) {
+        if (routeRepository.existsByRouteNameAndMember(routeName, member)) {
+            throw new HalmangVisionException(ALREADY_EXIST_ROUTE_NAME);
+        }
+    }
+
+    public void updateRouteName(Long routeId, CreateRouteNameUpdateRequest createRouteNameUpdateRequest, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        Route route = routeRepository.findByIdAndMember(routeId, member)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
+
+        String routeName = createRouteNameUpdateRequest.getRouteName();
+        validateRouteName(routeName, member);
+
+        route.updateRouteName(routeName);
+    }
+
+    public void updateRouteSpots(Long routeId, CreateRouteSpotUpdateRequest createRouteSpotUpdateRequest, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        Route route = routeRepository.findByIdAndMember(routeId, member)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
+
+        List<Long> spotIds = createRouteSpotUpdateRequest.getRouteSpots();
+        validateRouteSpot(spotIds);
+
+        List<Spot> spots = spotRepository.findAllById(spotIds);
+        List<RouteSpot> routeSpots = spots.stream()
+                .map(spot -> CreateRouteSpotRequest.toEntity(spot, route))
+                .toList();
+
+        route.updateRouteSpots(routeSpots);
     }
 }
