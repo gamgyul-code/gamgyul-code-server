@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,20 +43,27 @@ public class RouteController {
     }
 
     @GetMapping("/{routeId}")
-    @Operation(summary = "경로 상세 조회", description = "경로 상세 정보를 조회한다.")
+    @Operation(summary = "내 경로 상세 조회", description = "경로 상세 정보를 조회한다.")
     public MyRouteDetailResponse findMyRouteDetail(@PathVariable Long routeId, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         return routeService.findRouteDetail(routeId, apiMember);
     }
 
     @PutMapping("/{routeId}/name")
-    @Operation(summary = "경로 이름 수정", description = "경로를 수정한다.")
+    @Operation(summary = "내 경로 이름 수정", description = "경로를 수정한다.")
     public void updateRouteName(@PathVariable Long routeId, @RequestBody CreateRouteNameUpdateRequest createRouteNameUpdateRequest, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         routeService.updateRouteName(routeId, createRouteNameUpdateRequest, apiMember);
     }
 
     @PutMapping("/{routeId}")
-    @Operation(summary = "경로 관광지 수정", description = "경로 관광지를 수정한다.")
+    @Operation(summary = "내 경로 관광지 수정", description = "경로 관광지를 수정한다.")
     public void updateRouteSpot(@PathVariable Long routeId, @RequestBody CreateRouteSpotUpdateRequest createRouteSpotUpdateRequest, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         routeService.updateRouteSpots(routeId, createRouteSpotUpdateRequest, apiMember);
     }
+
+    @DeleteMapping("/{routeId}")
+    @Operation(summary = "내 경로 삭제", description = "경로를 삭제한다.")
+    public void deleteRoute(@PathVariable Long routeId, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        routeService.deleteRoute(routeId, apiMember);
+    }
+
 }

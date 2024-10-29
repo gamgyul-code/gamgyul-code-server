@@ -133,4 +133,12 @@ public class RouteService {
 
         route.updateRouteSpots(routeSpots);
     }
+
+    public void deleteRoute(Long routeId, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        Route route = routeRepository.findByIdAndMember(routeId, member)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
+
+        routeRepository.delete(route);
+    }
 }
