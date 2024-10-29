@@ -22,4 +22,11 @@ public interface SpotTranslationRepository extends JpaRepository<SpotTranslation
             @Param("languageCode") LanguageCode languageCode);
 
     List<SpotTranslation> findAllBySpot_SpotRegionAndLanguageCode(SpotRegion spotRegion, LanguageCode languageCode);
+
+    @Query("SELECT st FROM SpotTranslation st " +
+            "JOIN st.spot s " +
+            "JOIN RouteSpot rs ON rs.spot = s " +
+            "WHERE rs.route.id = :routeId AND st.languageCode = :languageCode")
+    List<SpotTranslation> findByRouteIdAndLanguageCode(@Param("routeId") Long routeId,
+                                                       @Param("languageCode") LanguageCode languageCode);
 }

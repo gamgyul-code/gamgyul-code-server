@@ -22,6 +22,7 @@ import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteSpotResponse;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class RouteService {
     private final MemberRepository memberRepository;
     private final SpotRepository spotRepository;
     private final RouteRepository routeRepository;
+    private final SpotTranslationRepository spotTranslationRepository;
 
     private static final int MINIMUM_ROUTE_SPOT_SIZE = 2;
     private static final int MAXIMUM_ROUTE_SPOT_SIZE = 6;
@@ -75,12 +77,7 @@ public class RouteService {
         Route route = routeRepository.findByIdAndMember(routeId, member)
                 .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
 
-        List<RouteSpot> routeSpots = route.getRouteSpots();
-        List<SpotTranslation> spotTranslations = routeSpots.stream()
-                .map(RouteSpot::getSpot)
-                .map(Spot::getTranslations)
-                .flatMap(List::stream)
-                .toList();
+        List<SpotTranslation> spotTranslations = spotTranslationRepository.findByRouteIdAndLanguageCode(routeId, member.getLanguageCode());
 
         List<RouteSpotResponse> routeSpotResponses = spotTranslations.stream()
                 .map(RouteSpotResponse::fromEntity)
