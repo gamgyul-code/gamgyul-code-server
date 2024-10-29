@@ -3,6 +3,7 @@ package com.gamgyul_code.halmang_vision.route.domain;
 import com.gamgyul_code.halmang_vision.global.utils.BaseTimeEntity;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +31,8 @@ public class Route extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 15)
+    @Size(min = 1, max = 15)
+    @Column(unique = true)
     private String routeName; // TODO : 해당 멤버 기준 중복 불가
 
     @ManyToOne
@@ -39,4 +41,8 @@ public class Route extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RouteSpot> routeSpots = new ArrayList<>();
+
+    public void updateRoute(List<RouteSpot> routeSpots) {
+        this.routeSpots = routeSpots;
+    }
 }

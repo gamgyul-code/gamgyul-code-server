@@ -30,6 +30,6 @@ public class RouteSpot extends BaseTimeEntity {
     private Spot spot;
 
     @ManyToOne
-    @JoinColumn(name = "route_id", nullable = false)
+    @JoinColumn(name = "route_id")
     private Route route;
 }
