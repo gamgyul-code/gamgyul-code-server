@@ -3,11 +3,12 @@ package com.gamgyul_code.halmang_vision.route.presentation;
 import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.route.application.RouteService;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRecommendRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteNameUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteDetailResponse;
-import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteResponse;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,9 +37,15 @@ public class RouteController {
         routeService.createRoute(createRouteRequest, apiMember);
     }
 
+    @PostMapping("/recommend")
+    @Operation(summary = "추천 경로 생성", description = "추천 경로를 생성한다.")
+    public void createRecommendRoute(@RequestBody CreateRecommendRouteRequest createRecommendRouteRequest, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        routeService.createRecommendRoute(createRecommendRouteRequest, apiMember);
+    }
+
     @GetMapping
     @Operation(summary = "내 경로 조회", description = "사용자가 만든 경로를 조회한다.")
-    public List<MyRouteResponse> findAllMyRoutes(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+    public List<RouteResponse> findAllMyRoutes(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         return routeService.findAllMyRoutes(apiMember);
     }
 
@@ -46,6 +53,12 @@ public class RouteController {
     @Operation(summary = "내 경로 상세 조회", description = "경로 상세 정보를 조회한다.")
     public MyRouteDetailResponse findMyRouteDetail(@PathVariable Long routeId, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         return routeService.findRouteDetail(routeId, apiMember);
+    }
+
+    @GetMapping("/recommend")
+    @Operation(summary = "추천 경로 조회", description = "사용자의 언어를 기반으로 추천 경로를 조회한다.")
+    public List<RouteResponse> findAllRecommendRoutes(@Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        return routeService.findAllRecommendRoutes(apiMember);
     }
 
     @PutMapping("/{routeId}/name")
