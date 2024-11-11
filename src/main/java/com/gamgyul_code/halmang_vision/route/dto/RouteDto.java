@@ -4,6 +4,7 @@ import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.route.domain.RecommendRoute;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
+import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,11 +51,15 @@ public class RouteDto {
         @Schema(description = "경로 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;
 
+        @Schema(description = "언어 코드", example = "KOR")
+        private LanguageCode languageCode;
+
         public RecommendRoute toEntity(Member member) {
             return RecommendRoute.builder()
                     .routeName(routeName)
                     .member(member)
                     .imgUrl(imgUrl)
+                    .languageCode(languageCode)
                     .build();
         }
     }
@@ -110,8 +115,8 @@ public class RouteDto {
     @Data
     @Builder
     @AllArgsConstructor
-    @Schema(description = "내가 만든 경로 목록 조회")
-    public static class MyRouteResponse {
+    @Schema(description = "경로 목록 조회")
+    public static class RouteResponse {
 
         @Schema(description = "경로 ID", example = "1")
         private Long id;
@@ -122,11 +127,19 @@ public class RouteDto {
         @Schema(description = "루트 내 첫 번째 관광지의 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;
 
-        public static MyRouteResponse fromEntity(Route route) {
-            return MyRouteResponse.builder()
+        public static RouteResponse fromEntity(Route route) {
+            return RouteResponse.builder()
                     .id(route.getId())
                     .routeName(route.getRouteName())
                     .imgUrl(route.getRouteSpots().get(0).getSpot().getImgUrl())
+                    .build();
+        }
+
+        public static RouteResponse fromEntity(RecommendRoute recommendRoute) {
+            return RouteResponse.builder()
+                    .id(recommendRoute.getId())
+                    .routeName(recommendRoute.getRouteName())
+                    .imgUrl(recommendRoute.getImgUrl())
                     .build();
         }
     }
