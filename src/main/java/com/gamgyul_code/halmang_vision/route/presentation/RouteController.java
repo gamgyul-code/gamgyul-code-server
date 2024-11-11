@@ -3,6 +3,7 @@ package com.gamgyul_code.halmang_vision.route.presentation;
 import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.route.application.RouteService;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRecommendRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteNameUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotUpdateRequest;
@@ -34,6 +35,12 @@ public class RouteController {
     @Operation(summary = "내 경로 생성", description = "사용자에게 경로를 생성한다.")
     public void createRoute(@RequestBody CreateRouteRequest createRouteRequest, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         routeService.createRoute(createRouteRequest, apiMember);
+    }
+
+    @PostMapping("/recommend")
+    @Operation(summary = "추천 경로 생성", description = "추천 경로를 생성한다.")
+    public void createRecommendRoute(@RequestBody CreateRecommendRouteRequest createRecommendRouteRequest, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        routeService.createRecommendRoute(createRecommendRouteRequest, apiMember);
     }
 
     @GetMapping

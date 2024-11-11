@@ -9,9 +9,12 @@ import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
+import com.gamgyul_code.halmang_vision.route.domain.RecommendRoute;
+import com.gamgyul_code.halmang_vision.route.domain.RecommendRouteRepository;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.route.domain.RouteRepository;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRecommendRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteNameUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotRequest;
@@ -36,6 +39,7 @@ public class RouteService {
     private final MemberRepository memberRepository;
     private final SpotRepository spotRepository;
     private final RouteRepository routeRepository;
+    private final RecommendRouteRepository recommendRouteRepository;
     private final SpotTranslationRepository spotTranslationRepository;
 
     private static final int MINIMUM_ROUTE_SPOT_SIZE = 2;
@@ -59,6 +63,26 @@ public class RouteService {
                 .toList();
 
         route.initRouteSpots(routeSpots);
+    }
+
+    public void createRecommendRoute(CreateRecommendRouteRequest createRecommendRouteRequest, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        String routeName = createRecommendRouteRequest.getRouteName();
+        List<Long> spotIds = createRecommendRouteRequest.getRouteSpots();
+        List<Spot> spots = spotRepository.findAllById(spotIds);
+
+        validateRouteName(routeName, member);
+        validateRouteSpot(spotIds);
+
+        RecommendRoute recommendRoute = createRecommendRouteRequest.toEntity(member);
+        recommendRouteRepository.save(recommendRoute);
+
+        List<RouteSpot> routeSpots = spots.stream()
+                .map(spot -> CreateRouteSpotRequest.toEntity(spot, recommendRoute))
+                .toList();
+
+        recommendRoute.initRouteSpots(routeSpots);
     }
 
     public List<MyRouteResponse> findAllMyRoutes(ApiMember apiMember) {
