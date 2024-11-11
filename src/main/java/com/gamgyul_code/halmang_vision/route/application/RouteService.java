@@ -20,8 +20,9 @@ import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.CreateRouteSpotUpdateRequest;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteDetailResponse;
-import com.gamgyul_code.halmang_vision.route.dto.RouteDto.MyRouteResponse;
+import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteResponse;
 import com.gamgyul_code.halmang_vision.route.dto.RouteDto.RouteSpotResponse;
+import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslation;
@@ -52,7 +53,7 @@ public class RouteService {
         List<Long> spotIds = createRouteRequest.getRouteSpots();
         List<Spot> spots = spotRepository.findAllById(spotIds);
 
-        validateRouteName(routeName, member);
+        validateRouteName(routeName, member, false);
         validateRouteSpot(spotIds);
 
         Route route = createRouteRequest.toEntity(member);
@@ -72,7 +73,7 @@ public class RouteService {
         List<Long> spotIds = createRecommendRouteRequest.getRouteSpots();
         List<Spot> spots = spotRepository.findAllById(spotIds);
 
-        validateRouteName(routeName, member);
+        validateRouteName(routeName, member, true);
         validateRouteSpot(spotIds);
 
         RecommendRoute recommendRoute = createRecommendRouteRequest.toEntity(member);
@@ -85,13 +86,13 @@ public class RouteService {
         recommendRoute.initRouteSpots(routeSpots);
     }
 
-    public List<MyRouteResponse> findAllMyRoutes(ApiMember apiMember) {
+    public List<RouteResponse> findAllMyRoutes(ApiMember apiMember) {
         Member member = apiMember.toMember(memberRepository);
 
         List<Route> routes = routeRepository.findAllByMember(member);
 
         return routes.stream()
-                .map(MyRouteResponse::fromEntity)
+                .map(RouteResponse::fromEntity)
                 .toList();
     }
 
@@ -110,6 +111,17 @@ public class RouteService {
         return MyRouteDetailResponse.fromEntity(route, routeSpotResponses);
     }
 
+    public List<RouteResponse> findAllRecommendRoutes(ApiMember apiMember) {
+
+        Member member = apiMember.toMember(memberRepository);
+        LanguageCode languageCode = member.getLanguageCode();
+        List<RecommendRoute> recommendRoutes = recommendRouteRepository.findAllByLanguageCode(languageCode);
+
+        return recommendRoutes.stream()
+                .map(RouteResponse::fromEntity)
+                .toList();
+    }
+
     private void validateRouteSpot(List<Long> spotIds) {
 
         if (spotIds.size() < MINIMUM_ROUTE_SPOT_SIZE || spotIds.size() > MAXIMUM_ROUTE_SPOT_SIZE ) {
@@ -122,7 +134,11 @@ public class RouteService {
         }
     }
 
-    private void validateRouteName(String routeName, Member member) {
+    private void validateRouteName(String routeName, Member member, boolean isRecommendRoute) {
+        if (isRecommendRoute && recommendRouteRepository.existsByRouteName(routeName)) {
+            throw new HalmangVisionException(ALREADY_EXIST_ROUTE_NAME);
+        }
+
         if (routeRepository.existsByRouteNameAndMember(routeName, member)) {
             throw new HalmangVisionException(ALREADY_EXIST_ROUTE_NAME);
         }
@@ -134,7 +150,7 @@ public class RouteService {
                 .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
 
         String routeName = createRouteNameUpdateRequest.getRouteName();
-        validateRouteName(routeName, member);
+        validateRouteName(routeName, member, false);
 
         route.updateRouteName(routeName);
     }
