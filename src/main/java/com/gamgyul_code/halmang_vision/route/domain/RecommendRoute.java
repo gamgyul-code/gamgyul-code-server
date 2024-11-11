@@ -25,32 +25,34 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Route extends BaseTimeEntity {
+public class RecommendRoute extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(min = 1, max = 15)
     @Column(unique = true)
-    private String routeName; // TODO : 해당 멤버 기준 중복 불가
+    private String routeName;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "route", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RouteSpot> routeSpots = new ArrayList<>();
+    @OneToMany(mappedBy = "recommendRoute", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RouteSpot> recommendRouteSpots = new ArrayList<>();
+
+    private String imgUrl;
 
     public void updateRouteName(String routeName) {
         this.routeName = routeName;
     }
 
     public void initRouteSpots(List<RouteSpot> routeSpots) {
-        this.routeSpots = routeSpots;
+        this.recommendRouteSpots = routeSpots;
     }
 
     public void updateRouteSpots(List<RouteSpot> routeSpots) {
-        this.routeSpots.clear();
-        this.routeSpots.addAll(routeSpots);
+        this.recommendRouteSpots.clear();
+        this.recommendRouteSpots.addAll(routeSpots);
     }
 }

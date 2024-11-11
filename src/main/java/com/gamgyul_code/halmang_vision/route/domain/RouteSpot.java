@@ -32,4 +32,8 @@ public class RouteSpot extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
+
+    @ManyToOne
+    @JoinColumn(name = "recommend_route_id")
+    private RecommendRoute recommendRoute;
 }
