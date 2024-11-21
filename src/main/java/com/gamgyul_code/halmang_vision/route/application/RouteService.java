@@ -5,6 +5,8 @@ import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_ROUT_SPOT_ID;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_ROUTE;
 
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRoute;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRouteRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
@@ -42,6 +44,7 @@ public class RouteService {
     private final RouteRepository routeRepository;
     private final RecommendRouteRepository recommendRouteRepository;
     private final SpotTranslationRepository spotTranslationRepository;
+    private final BookmarkRouteRepository bookmarkRouteRepository;
 
     private static final int MINIMUM_ROUTE_SPOT_SIZE = 2;
     private static final int MAXIMUM_ROUTE_SPOT_SIZE = 6;
@@ -117,10 +120,49 @@ public class RouteService {
         LanguageCode languageCode = member.getLanguageCode();
         List<RecommendRoute> recommendRoutes = recommendRouteRepository.findAllByLanguageCode(languageCode);
 
+        List<Long> bookmarkedRecommendRouteIds = bookmarkRouteRepository.findAllByMember(member)
+                .stream()
+                .map(bookmarkRoute -> bookmarkRoute.getRecommendRoute().getId())
+                .toList();
+
         return recommendRoutes.stream()
-                .map(RouteResponse::fromEntity)
+                .map(recommendRoute -> RouteResponse.fromEntity(recommendRoute,
+                        bookmarkedRecommendRouteIds.contains(recommendRoute.getId())))
                 .toList();
     }
+
+    public MyRouteDetailResponse findRecommendRouteDetail(Long recommendRouteId, ApiMember apiMember) {
+
+        Member member = apiMember.toMember(memberRepository);
+        RecommendRoute recommendRoute = recommendRouteRepository.findById(recommendRouteId)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_ROUTE));
+
+        List<SpotTranslation> spotTranslations = spotTranslationRepository.findByRecommendRouteIdAndLanguageCode(recommendRouteId, member.getLanguageCode());
+
+        List<RouteSpotResponse> routeSpotResponses = spotTranslations.stream()
+                .map(RouteSpotResponse::fromEntity)
+                .toList();
+
+        return MyRouteDetailResponse.fromEntity(recommendRoute, routeSpotResponses);
+    }
+
+    public List<RouteResponse> findAllMyRecommendRoutes(ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        List<RecommendRoute> recommendRoutes = recommendRouteRepository.findAllByMember(member);
+
+        List<Long> bookmarkedRecommendRouteIds = bookmarkRouteRepository.findAllByMember(member)
+                .stream()
+                .map(bookmarkRoute -> bookmarkRoute.getRecommendRoute().getId())
+                .toList();
+
+        return recommendRoutes.stream()
+                .map(recommendRoute -> RouteResponse.fromEntity(recommendRoute,
+                        bookmarkedRecommendRouteIds.contains(recommendRoute.getId())))
+                .toList();
+    }
+
+
 
     private void validateRouteSpot(List<Long> spotIds) {
 

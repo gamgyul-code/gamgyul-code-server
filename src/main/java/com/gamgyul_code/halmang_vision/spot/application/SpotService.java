@@ -6,8 +6,8 @@ import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
 
-import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
-import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpot;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpotRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
@@ -36,7 +36,7 @@ public class SpotService {
 
     private final SpotRepository spotRepository;
     private final SpotTranslationRepository spotTranslationRepository;
-    private final BookmarkRepository bookmarkRepository;
+    private final BookmarkSpotRepository bookmarkSpotRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
@@ -83,7 +83,7 @@ public class SpotService {
                 .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT_TRANSLATION));
 
         long memberId = apiMember.toMember(memberRepository).getId();
-        boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotId);
+        boolean isBookmarked = bookmarkSpotRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotId);
 
         return SpotTranslationDetailResponse.fromEntity(spotTranslation, isBookmarked);
     }
@@ -99,7 +99,7 @@ public class SpotService {
         return spotTranslations.stream()
                 .map(spotTranslation -> {
                     long memberId = member.getId();
-                    boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
+                    boolean isBookmarked = bookmarkSpotRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
                     return SimpleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
                 })
                 .toList();
@@ -111,9 +111,9 @@ public class SpotService {
         Long memberId = member.getId();
         LanguageCode languageCode = member.getLanguageCode();
 
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByMemberId(memberId);
+        List<BookmarkSpot> bookmarkSpots = bookmarkSpotRepository.findAllByMemberId(memberId);
 
-        return bookmarks.stream()
+        return bookmarkSpots.stream()
                 .map(bookmark -> {
                     Spot spot = bookmark.getSpot();
                     SpotTranslation spotTranslation = spotTranslationRepository.findBySpotAndLanguageCode(spot, languageCode)
@@ -138,7 +138,7 @@ public class SpotService {
         return spotTranslations.stream()
                 .map(spotTranslation -> {
                     long memberId = member.getId();
-                    boolean isBookmarked = bookmarkRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
+                    boolean isBookmarked = bookmarkSpotRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
                     return SimpleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
                 })
                 .toList();
