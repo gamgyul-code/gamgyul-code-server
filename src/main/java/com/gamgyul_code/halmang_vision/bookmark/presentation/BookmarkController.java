@@ -3,6 +3,7 @@ package com.gamgyul_code.halmang_vision.bookmark.presentation;
 import com.gamgyul_code.halmang_vision.bookmark.application.BookmarkService;
 import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,9 +23,10 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @Operation(summary = "관광지 북마크 생성", description = "해당 회원에게 관광지 북마크를 생성한다.")
-    @PostMapping("/spots/{spotId}")
-    public void createSpotBookmark(@PathVariable Long spotId, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
-        bookmarkService.createSpotBookmark(spotId, apiMember);
+    @PostMapping("/spots/{spotId}/{spotCategory}")
+    public void createSpotBookmark(@PathVariable Long spotId, @PathVariable SpotCategory spotCategory,
+                                   @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        bookmarkService.createSpotBookmark(spotId, spotCategory, apiMember);
     }
 
     @Operation(summary = "관광지 북마크 삭제", description = "해당 회원에게 관광지 북마크를 삭제한다.")
