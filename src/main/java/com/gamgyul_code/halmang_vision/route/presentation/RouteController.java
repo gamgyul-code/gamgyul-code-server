@@ -79,4 +79,9 @@ public class RouteController {
         routeService.deleteRoute(routeId, apiMember);
     }
 
+    @GetMapping("/recommend/{recommendRouteId}")
+    @Operation(summary = "추천 경로 상세 조회", description = "경로 상세 정보를 조회한다.")
+    public MyRouteDetailResponse findMyRecommendRouteDetail(@PathVariable Long recommendRouteId, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        return routeService.findRecommendRouteDetail(recommendRouteId, apiMember);
+    }
 }

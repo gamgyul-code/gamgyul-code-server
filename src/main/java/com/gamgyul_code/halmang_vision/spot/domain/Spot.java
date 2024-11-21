@@ -1,6 +1,6 @@
 package com.gamgyul_code.halmang_vision.spot.domain;
 
-import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpot;
 import com.gamgyul_code.halmang_vision.global.utils.BaseTimeEntity;
 import com.gamgyul_code.halmang_vision.route.domain.RouteSpot;
 import jakarta.persistence.CascadeType;
@@ -70,7 +70,7 @@ public class Spot extends BaseTimeEntity {
     private List<SpotTranslation> translations = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Bookmark> bookmarks = new ArrayList<>();
+    private List<BookmarkSpot> bookmarkSpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RouteSpot> routeSpots = new ArrayList<>();

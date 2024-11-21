@@ -3,14 +3,16 @@ package com.gamgyul_code.halmang_vision.bookmark.application;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_BOOKMARKED;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_BOOKMARK;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
-import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT_TRANSLATION;
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkGenerator;
-import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRepository;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRouteRepository;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpotRepository;
 import com.gamgyul_code.halmang_vision.global.exception.HalmangVisionException;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
+import com.gamgyul_code.halmang_vision.route.domain.RecommendRoute;
+import com.gamgyul_code.halmang_vision.route.domain.RecommendRouteRepository;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
@@ -24,9 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookmarkService {
 
     private final SpotRepository spotRepository;
-    private final BookmarkRepository bookmarkRepository;
+    private final BookmarkSpotRepository bookmarkSpotRepository;
+    private final BookmarkRouteRepository bookmarkRouteRepository;
     private final BookmarkGenerator bookmarkGenerator;
     private final MemberRepository memberRepository;
+    private final RecommendRouteRepository recommendRouteRepository;
 
     @Transactional
     public void createSpotBookmark(long spotId, SpotCategory spotCategory, ApiMember apiMember) {
@@ -35,7 +39,7 @@ public class BookmarkService {
 
         validateBookmarkExists(member, spot, false);
 
-        bookmarkRepository.save(bookmarkGenerator.generate(spot, member, spotCategory));
+        bookmarkSpotRepository.save(bookmarkGenerator.generate(spot, member, spotCategory));
     }
 
     @Transactional
@@ -46,7 +50,7 @@ public class BookmarkService {
 
         validateBookmarkExists(member, spot, true);
 
-        bookmarkRepository.deleteByMemberIdAndSpotId(member.getId(), spot.getId());
+        bookmarkSpotRepository.deleteByMemberIdAndSpotId(member.getId(), spot.getId());
     }
 
     private Spot findSpotById(Long spotId) {
@@ -55,7 +59,7 @@ public class BookmarkService {
     }
 
     private void validateBookmarkExists(Member member, Spot spot, boolean shouldExist) {
-        boolean isAlreadyBookmarked = bookmarkRepository
+        boolean isAlreadyBookmarked = bookmarkSpotRepository
                 .existsBookmarkByMemberIdAndSpotId(member.getId(), spot.getId());
 
         if (shouldExist && !isAlreadyBookmarked) {
@@ -64,5 +68,39 @@ public class BookmarkService {
         if (!shouldExist && isAlreadyBookmarked) {
             throw new HalmangVisionException(ALREADY_BOOKMARKED);
         }
+    }
+
+    public void createRecommendRouteBookmark(Long recommendRouteId, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        validateRecommendRouteBookmarkExists(member, recommendRouteId, false);
+        RecommendRoute recommendRoute = findRecommendRouteById(recommendRouteId);
+
+        bookmarkRouteRepository.save(bookmarkGenerator.generate(recommendRoute, member));
+    }
+
+    public void deleteRecommendRouteBookmark(Long recommendRouteId, ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+
+        validateRecommendRouteBookmarkExists(member, recommendRouteId, true);
+
+        bookmarkRouteRepository.deleteByMemberIdAndRecommendRouteId(member.getId(), recommendRouteId);
+    }
+
+    private void validateRecommendRouteBookmarkExists(Member member, Long recommendRouteId, boolean shouldExist) {
+        boolean isAlreadyBookmarked = bookmarkRouteRepository
+                .existsBookmarkByMemberIdAndRecommendRouteId(member.getId(), recommendRouteId);
+
+        if (shouldExist && !isAlreadyBookmarked) {
+            throw new HalmangVisionException(NOT_FOUND_BOOKMARK);
+        }
+        if (!shouldExist && isAlreadyBookmarked) {
+            throw new HalmangVisionException(ALREADY_BOOKMARKED);
+        }
+    }
+
+    private RecommendRoute findRecommendRouteById(Long recommendRouteId) {
+        return recommendRouteRepository.findById(recommendRouteId)
+                .orElseThrow(() -> new HalmangVisionException(NOT_FOUND_SPOT));
     }
 }

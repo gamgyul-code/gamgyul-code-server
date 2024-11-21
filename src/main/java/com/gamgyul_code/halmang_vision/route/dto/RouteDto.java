@@ -1,5 +1,7 @@
 package com.gamgyul_code.halmang_vision.route.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.route.domain.RecommendRoute;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
@@ -116,6 +118,7 @@ public class RouteDto {
     @Builder
     @AllArgsConstructor
     @Schema(description = "경로 목록 조회")
+    @JsonInclude(Include.NON_NULL)
     public static class RouteResponse {
 
         @Schema(description = "경로 ID", example = "1")
@@ -127,6 +130,9 @@ public class RouteDto {
         @Schema(description = "루트 내 첫 번째 관광지의 이미지 URL", example = "http://~~~.com/~~~.jpg")
         private String imgUrl;
 
+        @Schema(description = "북마크 여부", example = "true")
+        private boolean isBookmark;
+
         public static RouteResponse fromEntity(Route route) {
             return RouteResponse.builder()
                     .id(route.getId())
@@ -135,11 +141,12 @@ public class RouteDto {
                     .build();
         }
 
-        public static RouteResponse fromEntity(RecommendRoute recommendRoute) {
+        public static RouteResponse fromEntity(RecommendRoute recommendRoute, boolean isBookmark) {
             return RouteResponse.builder()
                     .id(recommendRoute.getId())
                     .routeName(recommendRoute.getRouteName())
                     .imgUrl(recommendRoute.getImgUrl())
+                    .isBookmark(isBookmark)
                     .build();
         }
     }
@@ -147,7 +154,7 @@ public class RouteDto {
     @Data
     @Builder
     @AllArgsConstructor
-    @Schema(description = "내가 만든 경로 상세 조회")
+    @Schema(description = "내가 만든 & 저장한 경로 상세 조회")
     public static class MyRouteDetailResponse {
 
         @Schema(description = "경로 ID", example = "1")
@@ -163,6 +170,14 @@ public class RouteDto {
             return MyRouteDetailResponse.builder()
                     .id(route.getId())
                     .routeName(route.getRouteName())
+                    .routeSpots(routeSpots)
+                    .build();
+        }
+
+        public static MyRouteDetailResponse fromEntity(RecommendRoute recommendRoute, List<RouteSpotResponse> routeSpots) {
+            return MyRouteDetailResponse.builder()
+                    .id(recommendRoute.getId())
+                    .routeName(recommendRoute.getRouteName())
                     .routeSpots(routeSpots)
                     .build();
         }

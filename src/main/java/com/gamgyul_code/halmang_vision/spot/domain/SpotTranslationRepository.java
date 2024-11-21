@@ -29,4 +29,11 @@ public interface SpotTranslationRepository extends JpaRepository<SpotTranslation
             "WHERE rs.route.id = :routeId AND st.languageCode = :languageCode")
     List<SpotTranslation> findByRouteIdAndLanguageCode(@Param("routeId") Long routeId,
                                                        @Param("languageCode") LanguageCode languageCode);
+
+    @Query("SELECT st FROM SpotTranslation st " +
+            "JOIN st.spot s " +
+            "JOIN RouteSpot rs ON rs.spot = s " +
+            "WHERE rs.recommendRoute.id= :recommendRouteId AND st.languageCode = :languageCode")
+    List<SpotTranslation> findByRecommendRouteIdAndLanguageCode(@Param("recommendRouteId") Long recommendRouteId,
+                                                                @Param("languageCode") LanguageCode languageCode);
 }

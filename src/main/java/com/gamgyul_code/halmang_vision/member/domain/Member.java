@@ -1,6 +1,6 @@
 package com.gamgyul_code.halmang_vision.member.domain;
 
-import com.gamgyul_code.halmang_vision.bookmark.domain.Bookmark;
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpot;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
 import jakarta.persistence.*;
@@ -37,7 +37,7 @@ public class Member {
     private LanguageCode languageCode;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Bookmark> bookmarks = new ArrayList<>();
+    private List<BookmarkSpot> bookmarkSpots = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Route> routes = new ArrayList<>();
