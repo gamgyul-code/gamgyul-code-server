@@ -12,6 +12,7 @@ import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.domain.Spot;
+import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ public class BookmarkService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void createSpotBookmark(long spotId, ApiMember apiMember) {
+    public void createSpotBookmark(long spotId, SpotCategory spotCategory, ApiMember apiMember) {
         Member member = apiMember.toMember(memberRepository);
         Spot spot = findSpotById(spotId);
 
         validateBookmarkExists(member, spot, false);
 
-        bookmarkRepository.save(bookmarkGenerator.generate(spot, member));
+        bookmarkRepository.save(bookmarkGenerator.generate(spot, member, spotCategory));
     }
 
     @Transactional

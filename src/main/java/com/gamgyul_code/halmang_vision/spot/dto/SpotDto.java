@@ -168,6 +168,9 @@ public class SpotDto {
         @Schema(description = "북마크 여부", example = "true")
         private boolean bookmarked;
 
+        @Schema(description = "관광지 카테고리", example = "HISTORY, LOVE")
+        private List<SpotCategory> spotCategories;
+
         public static SpotTranslationDetailResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
             return SpotTranslationDetailResponse.builder()
                     .spotTranslationId(spotTranslation.getId())
@@ -187,6 +190,7 @@ public class SpotDto {
                     .topographyStory(spotTranslation.getTopographyStory())
                     .caution(spotTranslation.getCaution())
                     .bookmarked(isBookmarked)
+                    .spotCategories(spotTranslation.getSpot().getSpotCategory())
                     .build();
         }
     }
@@ -215,6 +219,9 @@ public class SpotDto {
             @Schema(description = "북마크 여부", example = "true")
             private boolean bookmarked;
 
+            @Schema(description = "관광지 카테고리", example = "HISTORY, LOVE")
+            private List<SpotCategory> spotCategories;
+
             public static SimpleSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
                 return SimpleSpotTranslationResponse.builder()
                         .spotTranslationId(spotTranslation.getId())
@@ -223,6 +230,7 @@ public class SpotDto {
                         .imgUrl(spotTranslation.getSpot().getImgUrl())
                         .simpleExplanation(spotTranslation.getSimpleExplanation())
                         .bookmarked(isBookmarked)
+                        .spotCategories(spotTranslation.getSpot().getSpotCategory())
                         .build();
             }
     }
