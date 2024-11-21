@@ -22,6 +22,7 @@ import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRegion;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotTranslationRepository;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.MainScreenFilteredSpotTranslationResponse;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SimpleSpotTranslationResponse;
 import java.util.List;
@@ -140,6 +141,24 @@ public class SpotService {
                     long memberId = member.getId();
                     boolean isBookmarked = bookmarkSpotRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
                     return SimpleSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
+                })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MainScreenFilteredSpotTranslationResponse> findAllSpotsByMainScreenFilter(SpotCategory spotCategory,
+                                                                                          ApiMember apiMember) {
+        Member member = apiMember.toMember(memberRepository);
+        LanguageCode languageCode = member.getLanguageCode();
+
+        List<SpotTranslation> spotTranslations =
+                spotTranslationRepository.findAllBySpot_SpotCategoryAndLanguageCode(spotCategory, languageCode);
+
+        return spotTranslations.stream()
+                .map(spotTranslation -> {
+                    long memberId = member.getId();
+                    boolean isBookmarked = bookmarkSpotRepository.existsBookmarkByMemberIdAndSpotId(memberId, spotTranslation.getId());
+                    return MainScreenFilteredSpotTranslationResponse.fromEntity(spotTranslation, isBookmarked);
                 })
                 .toList();
     }

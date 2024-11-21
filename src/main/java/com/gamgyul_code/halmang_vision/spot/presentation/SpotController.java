@@ -4,9 +4,9 @@ import com.gamgyul_code.halmang_vision.global.utils.AuthPrincipal;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
 import com.gamgyul_code.halmang_vision.spot.application.SpotService;
 import com.gamgyul_code.halmang_vision.spot.domain.SpotCategory;
-import com.gamgyul_code.halmang_vision.spot.domain.SpotRegion;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotTranslationRequest;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.CreateSpotRequest;
+import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.MainScreenFilteredSpotTranslationResponse;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SpotTranslationDetailResponse;
 import com.gamgyul_code.halmang_vision.spot.dto.SpotDto.SimpleSpotTranslationResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,5 +68,12 @@ public class SpotController {
     public List<SimpleSpotTranslationResponse> findByRegion(@PathVariable String spotRegion, @Parameter(hidden = true)
                                                         @AuthPrincipal ApiMember apiMember) {
         return spotService.findAllSpotsByRegion(spotRegion, apiMember);
+    }
+
+    @GetMapping("/filters/{spotCategory}")
+    @Operation(summary = "메인 화면 필터링", description = "주어진 관광지 카테고리에 따라 관광지를 필터링해 조회한다. (halmang, love, history, myth)")
+    public List<MainScreenFilteredSpotTranslationResponse> findByMainFilter(@PathVariable SpotCategory spotCategory, @Parameter(hidden = true)
+                                                        @AuthPrincipal ApiMember apiMember) {
+        return spotService.findAllSpotsByMainScreenFilter(spotCategory, apiMember);
     }
 }

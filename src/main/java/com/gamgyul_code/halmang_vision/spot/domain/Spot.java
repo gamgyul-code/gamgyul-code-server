@@ -66,6 +66,10 @@ public class Spot extends BaseTimeEntity {
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$")
     private String phoneNumber;
 
+    private Double latitude;
+
+    private Double longitude;
+
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SpotTranslation> translations = new ArrayList<>();
 

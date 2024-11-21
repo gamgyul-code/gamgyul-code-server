@@ -44,6 +44,12 @@ public class SpotDto {
         @Schema(description = "관광지 전화번호", example = "064-783-0959")
         private String phoneNumber;
 
+        @Schema(description = "위도", example = "33.458")
+        private double latitude;
+
+        @Schema(description = "경도", example = "126.942")
+        private double longitude;
+
         public Spot toEntity() {
             return Spot.builder()
                     .name(name)
@@ -53,6 +59,8 @@ public class SpotDto {
                     .travelerStatistics(travelerStatistics)
                     .openingHours(openingHours)
                     .phoneNumber(phoneNumber)
+                    .latitude(latitude)
+                    .longitude(longitude)
                     .build();
         }
     }
@@ -233,5 +241,54 @@ public class SpotDto {
                         .spotCategories(spotTranslation.getSpot().getSpotCategory())
                         .build();
             }
+    }
+
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "메인 필터링 관광지 정보(번역) 응답")
+    public static class MainScreenFilteredSpotTranslationResponse {
+
+        @Schema(description = "관광지 번역 id", example = "1")
+        private Long spotTranslationId;
+
+        @Schema(description = "관광지 id(번역 이전)", example = "1")
+        private Long spotId;
+
+        @Schema(description = "관광지 이름", example = "성산일출봉")
+        private String name;
+
+        @Schema(description = "관광지 이미지 URL", example = "http://~~~.com/~~~.jpg")
+        private String imgUrl;
+
+        @Schema(description = "연간 관광객 정보", example = "HIGH")
+        private TravelerStatistics travelerStatistics;
+
+        @Schema(description = "북마크 여부", example = "true")
+        private boolean bookmarked;
+
+        @Schema(description = "관광지 카테고리", example = "HISTORY, LOVE")
+        private List<SpotCategory> spotCategories;
+
+        @Schema(description = "위도", example = "33.458")
+        private double latitude;
+
+        @Schema(description = "경도", example = "126.942")
+        private double longitude;
+
+        public static MainScreenFilteredSpotTranslationResponse fromEntity(SpotTranslation spotTranslation, boolean isBookmarked) {
+            return MainScreenFilteredSpotTranslationResponse.builder()
+                    .spotTranslationId(spotTranslation.getId())
+                    .spotId(spotTranslation.getSpot().getId())
+                    .name(spotTranslation.getName())
+                    .imgUrl(spotTranslation.getSpot().getImgUrl())
+                    .travelerStatistics(spotTranslation.getSpot().getTravelerStatistics())
+                    .bookmarked(isBookmarked)
+                    .spotCategories(spotTranslation.getSpot().getSpotCategory())
+                    .latitude(spotTranslation.getSpot().getLatitude())
+                    .longitude(spotTranslation.getSpot().getLongitude())
+                    .build();
+        }
     }
 }
