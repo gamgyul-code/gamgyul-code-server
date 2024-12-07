@@ -71,4 +71,10 @@ public class MemberController {
     public void updateLanguageCode(@PathVariable String code, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
         memberService.updateLanguageCode(code, apiMember);
     }
+
+    @GetMapping("/reissue")
+    @Operation(summary = "액세스 토큰 재발급", description = "액세스 토큰을 재발급합니다.")
+    public String reissueAccessToken(HttpServletRequest request, @Parameter(hidden = true) @AuthPrincipal ApiMember apiMember) {
+        return memberService.reissueAccessToken(request, apiMember);
+    }
 }
