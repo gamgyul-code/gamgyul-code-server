@@ -1,5 +1,6 @@
 package com.gamgyul_code.halmang_vision.member.application;
 
+import com.gamgyul_code.halmang_vision.global.jwt.JwtTokenProvider;
 import com.gamgyul_code.halmang_vision.member.domain.Member;
 import com.gamgyul_code.halmang_vision.member.domain.MemberRepository;
 import com.gamgyul_code.halmang_vision.member.dto.ApiMember;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public RedirectView logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
@@ -50,5 +52,20 @@ public class MemberService {
             cookie.setMaxAge(0);
             response.addCookie(cookie);
         }
+    }
+
+    public String reissueAccessToken(HttpServletRequest request, ApiMember apiMember) {
+        long memberId = apiMember.toMember(memberRepository).getId();
+
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            String name = cookie.getName();
+            if (name.equals("refreshToken")) {
+                String refreshToken = cookie.getValue();
+                jwtTokenProvider.validateToken(refreshToken);
+                return jwtTokenProvider.reissueAccessToken(refreshToken, memberId);
+            }
+        }
+        return null;
     }
 }
