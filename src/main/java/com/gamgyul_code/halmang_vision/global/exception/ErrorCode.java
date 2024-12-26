@@ -21,6 +21,8 @@ public enum ErrorCode {
     INVALID_SPOT_TRANSLATION_REGION(BAD_REQUEST, "유효하지 않은 관광지 번역 지역입니다."),
     INVALID_ROUTE_SPOT_SIZE(BAD_REQUEST, "경로에 포함된 관광지는 최소 2개, 최대 6개여야 합니다."),
     INVALID_ROUT_SPOT_ID(BAD_REQUEST, "유효하지 않은 관광지 ID입니다."),
+    MAX_ROUTE_SIZE_EXCEEDED(BAD_REQUEST, "경로의 최대 개수는 30개입니다."),
+    MAX_BOOKMARK_ROUTE_SIZE_EXCEEDED(BAD_REQUEST, "북마크 경로의 최대 개수는 30개입니다."),
     // 401 Unauthorized
 
     // 403 Forbidden
