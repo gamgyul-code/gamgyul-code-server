@@ -1,6 +1,7 @@
 package com.gamgyul_code.halmang_vision.bookmark.application;
 
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_BOOKMARKED;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.MAX_BOOKMARK_ROUTE_SIZE_EXCEEDED;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_BOOKMARK;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_SPOT;
 
@@ -31,6 +32,8 @@ public class BookmarkService {
     private final BookmarkGenerator bookmarkGenerator;
     private final MemberRepository memberRepository;
     private final RecommendRouteRepository recommendRouteRepository;
+
+    private static final int MAX_BOOKMARK_ROUTE_SIZE = 30;
 
     @Transactional
     public void createSpotBookmark(long spotId, SpotCategory spotCategory, ApiMember apiMember) {
@@ -74,6 +77,11 @@ public class BookmarkService {
         Member member = apiMember.toMember(memberRepository);
 
         validateRecommendRouteBookmarkExists(member, recommendRouteId, false);
+
+        if (member.getBookmarkRoutes().size() >= MAX_BOOKMARK_ROUTE_SIZE) {
+            throw new HalmangVisionException(MAX_BOOKMARK_ROUTE_SIZE_EXCEEDED);
+        }
+
         RecommendRoute recommendRoute = findRecommendRouteById(recommendRouteId);
 
         bookmarkRouteRepository.save(bookmarkGenerator.generate(recommendRoute, member));
