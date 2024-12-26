@@ -1,5 +1,6 @@
 package com.gamgyul_code.halmang_vision.member.domain;
 
+import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRoute;
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkSpot;
 import com.gamgyul_code.halmang_vision.route.domain.Route;
 import com.gamgyul_code.halmang_vision.spot.domain.LanguageCode;
@@ -41,6 +42,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Route> routes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookmarkRoute> bookmarkRoutes = new ArrayList<>();
 
     public void setLanguageCode(LanguageCode languageCode) {
         this.languageCode = languageCode;

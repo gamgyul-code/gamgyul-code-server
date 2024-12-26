@@ -3,6 +3,7 @@ package com.gamgyul_code.halmang_vision.route.application;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.ALREADY_EXIST_ROUTE_NAME;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_ROUTE_SPOT_SIZE;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.INVALID_ROUT_SPOT_ID;
+import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.MAX_ROUTE_SIZE_EXCEEDED;
 import static com.gamgyul_code.halmang_vision.global.exception.ErrorCode.NOT_FOUND_ROUTE;
 
 import com.gamgyul_code.halmang_vision.bookmark.domain.BookmarkRoute;
@@ -46,8 +47,9 @@ public class RouteService {
     private final SpotTranslationRepository spotTranslationRepository;
     private final BookmarkRouteRepository bookmarkRouteRepository;
 
-    private static final int MINIMUM_ROUTE_SPOT_SIZE = 2;
-    private static final int MAXIMUM_ROUTE_SPOT_SIZE = 6;
+    private static final int MIN_ROUTE_SPOT_SIZE = 2;
+    private static final int MAX_ROUTE_SPOT_SIZE = 6;
+    private static final int MAX_ROUTE_SIZE = 30;
 
     public void createRoute(CreateRouteRequest createRouteRequest, ApiMember apiMember) {
         Member member = apiMember.toMember(memberRepository);
@@ -58,6 +60,10 @@ public class RouteService {
 
         validateRouteName(routeName, member, false);
         validateRouteSpot(spotIds);
+
+        if (member.getRoutes().size() >= MAX_ROUTE_SIZE) {
+            throw new HalmangVisionException(MAX_ROUTE_SIZE_EXCEEDED);
+        }
 
         Route route = createRouteRequest.toEntity(member);
         routeRepository.save(route);
@@ -161,12 +167,9 @@ public class RouteService {
                         bookmarkedRecommendRouteIds.contains(recommendRoute.getId())))
                 .toList();
     }
-
-
-
     private void validateRouteSpot(List<Long> spotIds) {
 
-        if (spotIds.size() < MINIMUM_ROUTE_SPOT_SIZE || spotIds.size() > MAXIMUM_ROUTE_SPOT_SIZE ) {
+        if (spotIds.size() < MIN_ROUTE_SPOT_SIZE || spotIds.size() > MAX_ROUTE_SPOT_SIZE ) {
             throw new HalmangVisionException(INVALID_ROUTE_SPOT_SIZE);
         }
 

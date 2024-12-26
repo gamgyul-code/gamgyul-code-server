@@ -29,6 +29,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 @Transactional
@@ -162,4 +164,15 @@ public class SpotService {
                 })
                 .toList();
     }
+/*
+    public Mono<String> geocodingTest() {
+        WebClient webClient = WebClient.create("https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=분당구 불정로 6");
+        return webClient.get()
+                .header("x-ncp-apigw-api-key-id", "ss7wdty0vw")
+                .header("x-ncp-apigw-api-key", "MPUodXhflzo6AhOKWqni8saPDOMqHPn0Jhsa7s7J")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+ */
 }
